@@ -41,8 +41,8 @@
       domaine maillon = malloc(sizeof(struct s_element));
 
       if(est_vide(*d)){
-        //Si le domaine pointe sur NULL on l'initalise comm il faut et lui affecte value
-        (*d) = malloc(sizeof(struct s_element));
+        //Si le domaine pointe sur NULL on l'initalise comme il faut et lui affecte value
+        (*d) = maillon;
 
         (*d)->suivant = NULL;
         (*d)->precedent = NULL;
