@@ -23,10 +23,13 @@ int est_vide_liste_contrainte(listeContrainte l);
 int enlever_contrainte(listeContrainte* l, int indice);
 // retourne 1 si arrive a enlever la contrainte d'indice dans l, 0 sinon
 
-void vider_liste_contrainte(listeContrainte* l);
-// vide la liste
+void vider_liste_contrainte(listeContrainte l);
+// vide recursivement la liste
 
 void afficher_liste_contrainte(listeContrainte l);
 // affiche les arbre de chaque contraintes
+
+char* creerTableauPresenceVariable(int nombreVariable);
+// creer le tableau stockant la presence des variables dans l'arbre d'une contrainte
 
 #endif
