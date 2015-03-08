@@ -3,16 +3,17 @@
 
 #include "domaine.h"
 
-//typedef int domaine;
-
-typedef struct pile_domaines{
+typedef struct maillon_pile_domaines{
   domaine dom;
-  struct pile_domaines *precedent;
-}pile_domaines;
+  struct maillon_pile_domaines *precedent;
+}maillon_pile_domaines;
 
+typedef maillon_pile_domaines* pile_domaines;
 
-void empiler(pile_domaines **p, domaine d);
-void depiler(pile_domaines **p);
-void afficher_pile(pile_domaines **p);
+pile_domaines creer_pile_domaines();
+void empiler(pile_domaines *p, domaine d);
+void depiler(pile_domaines *p);
+void afficher_pile(pile_domaines p);
+void vider_pile_domaines(pile_domaine p);
 
 #endif
