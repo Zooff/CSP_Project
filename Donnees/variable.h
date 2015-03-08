@@ -27,8 +27,8 @@ typedef variable* variables;
 // Initialise un pointeur NULL
 variables creer_liste_var_vide();
 
-// Ajoute une variable en début de liste (Seul le nom sera passé en parametre, sauf pour l'instant pour les divers tests)
-variables ajouter_var(variables V, char* nom_var, pile_domaines domaines, liste_de_contraintes listes);
+// Ajoute une variable en début de liste
+variables ajouter_var(variables V, char* nom_var);
 
 // Supprime une variable de la liste (La recherche est pour l'instant effectuer avec son nom, peux être modifier)
 variables supprimer_variable(variables V, char* nom_var);
@@ -37,19 +37,19 @@ variables supprimer_variable(variables V, char* nom_var);
 void liberer_liste(variables V);
 
 // Retourne la premiere variable
-variable premiere_variable(variables V);
+variable* premiere_variable(variables V);
 
 // Retourne la dernière variable
-variable derniere_variable(variables V);
+variable* derniere_variable(variables V);
 
 // Affecte la valeur suivante du domaine a la variable
 int affecter_valeur(variables V);
 
 // Retourne la variable suivante
-variable suivante(variable var);
+variable* suivante(variable* var);
 
 // Retourne la variable precedente
-variable precedente(variable var);
+variable* precedente(variable* var);
 
 // Indique la fin de liste, 1 si en fin, 0 sinon
 int fin_de_liste(variables V);
@@ -60,6 +60,7 @@ void afficher_liste(variables V);
 // Fonction d'affichage d'une variable
 void afficher_variable(variable var);
 
-
+// Procédure d'affectation d'un domaine à une liste de variables. On créer une pile de domaines contenant d et on met cette pile dans V->domaines
+void affecterDommaineDansVariables(variables V, domaine d);
 
   #endif
