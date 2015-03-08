@@ -263,3 +263,10 @@
       }
       return new_d;
     }
+    
+    void vider_domaine(domaine d){
+        if(d != NULL){
+           vider_domaine(d->suivant);
+           free(d);
+      }
+    }
