@@ -140,10 +140,7 @@ contrainte liste_contraintes
 
 contrainte:
 { // on est sur le point d'analyser une contraintes, on creer son tableau de presence des variables en l'initialisant
-    presenceVariable = (char*) malloc((nombreVariable+1) * sizeof(char)); // + 1 pour avoir le \0 en fin de chaine
-    presenceVariable[nombreVariable] = '\0';
-    for(indiceVariable=0 ; indiceVariable<nombreVariable ; indiceVariable++) // prepare le tableau de presence des variables dans la contrainte qu'on commence a lire en mettant toutes les cases a 0
-        presenceVariable[indiceVariable] = '0'; // des qu'on trouve par la suite une variable dans la contrainte, on met l'indice de cette variable a '1' dans ce tableau
+    presenceVariable = creerTableauPresenceVariable(nombreVariable);
 }
 expression
 { // on a fini d'analyser la contrainte. on ajoute un maillon dans la liste des contraintes pour celle-ci en donnant son arbre et son tableau de presence des variables
