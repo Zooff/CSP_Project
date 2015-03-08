@@ -24,5 +24,6 @@
     domaine initialiser(int borne_inf, int borne_sup); //Renvoie un domaine contenant toutes les valeurs entre borne_inf et borne_sup incluses
     domaine union_domaine(domaine d1, domaine d2); //Renvoie l'union des domaines d1 et d2
     domaine intersection(domaine d1, domaine d2); //Renvoie l'intersection des domaines d1 et d2
+    void vider_domaine(domaine d); // Vide recursivement d
 
 #endif
