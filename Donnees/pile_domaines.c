@@ -1,52 +1,45 @@
 #include "pile_domaines.h"
 
+pile_domaines creer_pile_domaines(){
+  return NULL;
+}
 
-void empiler(pile_domaines **p, domaine d){
+void empiler(pile_domaines *p, domaine d){
 
-  pile_domaines *new = malloc(sizeof (*new));
+  pile_domaines new = (pile_domaines) malloc(1 * sizeof (maillon_pile_domaines));
   if(new != NULL){
     new->dom = d;
     new->precedent = *p;
     *p = new;
   }
+  else
+    fprintf(stderr, "Impossible d'empiler un domaine\n");
 }
 
-void depiler(pile_domaines **p){
+void depiler(pile_domaines *p){
 
-  if(p != NULL){
-    pile_domaines *temp = (*p)->precedent;
-    free(*p), *p = NULL;
+  if(*p != NULL){
+    pile_domaines temp = (*p)->precedent;
+    free(*p); 
     *p = temp;
   }
 }
 
-void afficher_pile(pile_domaines **p){
+void afficher_pile(pile_domaines p){
 
-  pile_domaines *temp = *p;
-  printf("\nPile de domaines :\n");
-
-  while((*p)->precedent != NULL){
-    afficher_domaine( (*p)->dom);
-    *p = (*p)->precedent;
+  fprintf(stderr, "\nPile de domaines :\n");
+  
+  while(p->precedent != NULL){
+    afficher_domaine(p->dom);
+    p = p->precedent;
   }
-  afficher_domaine ((*p)->dom);
-
-  *p = temp;
+  afficher_domaine (p->dom);
 }
 
-/*
-int main(int argc, char **argv){
-
-  pile_domaines *p1;
-  empiler(&p1,5);
-  empiler(&p1,6);
-  empiler(&p1,7);
-  empiler(&p1,8);
-  afficher_pile(&p1);
-  depiler(&p1);
-  afficher_pile(&p1);
-
-  return EXIT_SUCCESS;
-
+void vider_pile_domaines(pile_domaine p){
+  if(p != NULL){
+    vider_pile_domaines(p->precedent);
+    vider_domaine(p->dom);
+    free(p);
+  }
 }
-*/
