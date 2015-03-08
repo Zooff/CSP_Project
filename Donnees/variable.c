@@ -8,20 +8,14 @@ variables creer_liste_var_vide(){
   return NULL;
 }
 
-variables ajouter_var(variables V, char* nom_var, pile_domaines doms, liste_de_contraintes liste){
+variables ajouter_var(variables V, char* nom_var){
 
 
   variables new = (variables)xmalloc(1, sizeof(variable));
   new->id = -1;
   new->nom = nom_var;
-  new->domaines = doms;
-  new->valeur = doms.dom->valeur - 1;
-  new->contraintes = liste;
   new->precedent = NULL;
-  if (V == NULL)
-    new->suivant = NULL;
-  else
-    new->suivant = V;
+  new->suivant = V;
   if (V != NULL)
     V->precedent = new;
   return new;
@@ -58,25 +52,29 @@ variables supprimer_variable(variables V, char* nom_var){
 }
 
 void liberer_liste(variables V){
+  variables courant;
   while (V != NULL){
-    variables courant = V;
+    courant = V;
     V = V->suivant;
+    vider_liste_contrainte(courant->contraintes);
+    free(courant->nom);
     free(courant);
   }
-  free(V);
-  V = NULL;
+  vider_liste_contrainte(courant->contraintes);
+  free(courant->nom);
+  free(courant);
 }
 
-variable premiere_variable(variables V){
+variable* premiere_variable(variables V){
   while (V->precedent != NULL)
     V = V->precedent;
-  return *V;
+  return V;
 }
 
-variable derniere_variable(variables V){
+variable* derniere_variable(variables V){
   while (V->suivant != NULL)
     V = V->suivant;
-  return *V;
+  return V;
 }
 
 
@@ -91,23 +89,23 @@ int fin_de_liste(variables V){
 
 int affecter_valeur(variables V){
   domaine d = V->domaines.dom;
-  while(V->valeur > d->valeur){
+  while(d != NULL && V->valeur > d->valeur){
     d = d->suivant;
 
   }
-  if (d != NULL && d->suivant != NULL){
+  if (d != NULL){
     V->valeur = d->valeur;
     return 1;
   }
   return 0;
 }
 
-variable suivante(variable var){
-  return *var.suivant;
+variable* suivante(variable* var){
+  return var->suivant;
 }
 
-variable precedente(variable var){
-  return *var.precedent;
+variable* precedente(variable* var){
+  return var->precedent;
 }
 
 
@@ -122,7 +120,7 @@ void afficher_liste(variables V){
   while(V != NULL){
     if ( V->precedent == NULL)
       fprintf(stderr, "Debut \n");
-    fprintf(stderr,"Nom : %s, Valeur : %d, ID : %d\n", V->nom, V->valeur, V->id);
+    afficher_variable(*V);
     if (V->suivant == NULL)
       fprintf(stderr, "Fin\n");
     V = V->suivant;
@@ -131,7 +129,16 @@ void afficher_liste(variables V){
 
 void afficher_variable(variable var){
 
-  fprintf(stderr, "Nom : %s Valeur : %d, ID : %d\n", var.nom, var.valeur, var.id);
+  fprintf(stderr, "Nom : %s Valeur : %d, ID : %d\n", var.nom, (int)(var.valeur), var.id);
 
 
+}
+
+void affecterDommaineDansVariables(variables V, domaine d){
+  pile_domaines p = creer_pile_domaines();
+  empiler(&p, d);
+  while(V != NULL){
+        V->domaines = p;
+        V = V->suivant;
+    }
 }
