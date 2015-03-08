@@ -181,7 +181,7 @@ int verifier_les_contraintes(variable* variable){
 
 void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nombreVariable){
   int indiceVariable=0, indiceContrainte, i;
-  listeContrainte contrainte, courant, suivant;
+  listeContrainte contrainte;
   char* presenceVariable;
   while(V != NULL){ // pour chaque variable, on va chercher et lui ajouter des contraintes
     contrainte = *lc;
@@ -206,13 +206,5 @@ void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nomb
     V = V->suivant;
     indiceVariable++;
   }
-	// arriver ici, si il reste des contraintes dans lc, elles ne font intervenir aucune variable donc des contraintes inutiles donnes par un utilisateur soucieux d'embeter le codeur de ce programme. ces dernieres lignes lui sont dedicacees.
-  suivant = *lc;
-  while(suivant != NULL){
-    courant = suivant;
-    suivant = courant->suivant;
-    videArbre(courant->a);
-    free(courant->presenceVariable);
-    free(courant);
-  }
+  vider_liste_contrainte(*lc);// arriver ici, si il reste des contraintes dans lc, elles ne font intervenir aucune variable donc des contraintes inutiles donnes par un utilisateur soucieux d'embeter le codeur de ce programme. cette derniere ligne lui est dedicacee.
 }
