@@ -138,7 +138,81 @@ void affecterDommaineDansVariables(variables V, domaine d){
   pile_domaines p = creer_pile_domaines();
   empiler(&p, d);
   while(V != NULL){
-        V->domaines = p;
-        V = V->suivant;
+    V->domaines = p;
+    V = V->suivant;
+  }
+}
+
+void concat_variables(variables* v1, variables* v2){
+  variables courant = *v1;
+  if(*v1 == NULL) // si v1 est vide, la concatenantion de v1 avec v2 est v2
+    *v1 = *v2;
+  else if(*v2 != NULL){// si v2 n'est pas NULL, alors on change les pointeurs precedent du premier de v2 et suivant du dernier de v1
+    while(courant->suivant != NULL) // cherche le dernier pointeur de v1
+      courant = courant->suivant;
+    courant->suivant = *v2; // change le dernier pointeur suivant de v1 pour pointer sur le premier element de v2
+    (*v2)->precedent = courant; // change le premier pointeur precedent de v2 pour pointer sur le dernier element de v1
+  } // sinon si v2 est NULL, la concatenation est de v1 avec v2 est v1 donc on change rien
+}
+
+variable* retournerVariablePortantNom(variables V, char* nom, int* indiceVariable){
+  int i=0;
+  while(V != NULL && strcmp(V->nom, nom) != 0){
+    V = V->suivant;
+    i++;
+  }
+  if(V == NULL){
+    fprintf(stderr, "Erreur ligne %d, utilisation d'une variable '%s' sans la declarer auparavant en donnant son domaine, le programme quitte donc.\n", num_ligne, nom);
+    exit(EXIT_FAILURE);
+  }
+  *indiceVariable = i;
+  return V;
+}
+
+int verifier_les_contraintes(variable* variable){
+  listeContrainte l = variable->contraintes;
+  while(l != NULL){
+    if(evalue_contrainte(l->a) == 0)
+      return 0;
+    l = l->suivant;
+  }
+  return 1;
+}
+
+void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nombreVariable){
+  int indiceVariable=0, indiceContrainte, i;
+  listeContrainte contrainte, courant, suivant;
+  char* presenceVariable;
+  while(V != NULL){ // pour chaque variable, on va chercher et lui ajouter des contraintes
+    contrainte = *lc;
+    indiceContrainte = 0;
+    while(contrainte != NULL){ // pour chaque contrainte pas encore affectee (donc presente dans lc)
+      presenceVariable = contrainte->presenceVariable;
+      for(i=indiceVariable+1 ; i<nombreVariable ; i++) // on regarde la presence des variables d'indice plus grand dans la contrainte
+        if(presenceVariable[i] == '1')
+          break;
+      if(presenceVariable[indiceVariable] == '1' && i == nombreVariable) // si cette contrainte fait intervenir cette variable et ne fait pas intervenir de variable d'indice plus grand
+      { // cela veut dire que on a eu aucun '1' entre (exclus) dans l'intervale d'indice ]indiceVariable, nombreVariable[  du tableau presenceVariable. donc que la contrainte ne fait intervenir aucune variable d'indice plus grand que la variable en cours. donc on enleve cette contrainte de lc et on la met dans la liste des contraintes de cette variable
+       ajouter_contrainte(&(V->contraintes), contrainte->a, contrainte->presenceVariable);
+        contrainte = contrainte->suivant; // on doit faire passer au suivant ici car on fait un free sur cette contrainte dans la fonction juste en dessous
+        enlever_contrainte(lc, indiceContrainte);
+      // comme on enleve la contrainte, l'indice de la prochaine ne change pas dans lc donc on ne change pas indiceContrainte
+      }
+      else{ // si on n'enleve pas la contrainte, l'indice de la prochaine est l'indice + 1
+        indiceContrainte++;
+        contrainte = contrainte->suivant;
+      }
     }
+    V = V->suivant;
+    indiceVariable++;
+  }
+	// arriver ici, si il reste des contraintes dans lc, elles ne font intervenir aucune variable donc des contraintes inutiles donnes par un utilisateur soucieux d'embeter le codeur de ce programme. ces dernieres lignes lui sont dedicacees.
+  suivant = *lc;
+  while(suivant != NULL){
+    courant = suivant;
+    suivant = courant->suivant;
+    videArbre(courant->a);
+    free(courant->presenceVariable);
+    free(courant);
+  }
 }
