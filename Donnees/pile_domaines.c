@@ -36,7 +36,7 @@ void afficher_pile(pile_domaines p){
   afficher_domaine (p->dom);
 }
 
-void vider_pile_domaines(pile_domaine p){
+void vider_pile_domaines(pile_domaines p){
   if(p != NULL){
     vider_pile_domaines(p->precedent);
     vider_domaine(p->dom);
