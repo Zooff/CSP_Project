@@ -35,74 +35,90 @@
     }
 
     int ajouter_valeur(domaine* d, int value){
-      //Fonction qui ajoute la valeur "au bon endroit" afin d'obtenir des domaines triés
-      domaine courant = *d;
-      domaine precedent;
-      domaine maillon = malloc(sizeof(struct s_element));
+  //Fonction qui ajoute la valeur "au bon endroit" afin d'obtenir des domaines triés
+  domaine courant = *d;
+  domaine precedent;
 
-      if(est_vide(*d)){
-        //Si le domaine pointe sur NULL on l'initalise comme il faut et lui affecte value
-        (*d) = maillon;
+  if(est_vide(*d)){
+    //Si le domaine pointe sur NULL on l'initalise comm il faut et lui affecte value
+    (*d) = malloc(sizeof(struct s_element));
 
-        (*d)->suivant = NULL;
-        (*d)->precedent = NULL;
-        (*d)->valeur = value;
+    (*d)->suivant = NULL;
+    (*d)->precedent = NULL;
+    (*d)->valeur = value;
+
+    return 1;
+  }
+
+  domaine maillon = malloc(sizeof(struct s_element));
+  maillon->valeur = value;
+
+  if(!(deja_presente(*d, value))){
+    //On exécutera le reste uniquement si la valeur n'est pas présente dans le domaine
+    if((*d)->valeur > value){
+      /* Si la valeur à ajouter est inférieure à la première valeur du domaine alors
+       * on fait pointer le précédent du domaine sur l'élément à ajouter
+       * et on fait commencer le domaine au nouvel élément
+       */
+      (*d)->precedent = maillon;
+      maillon->suivant = *d;
+
+      *d = maillon;
+
+      return 1;
+    }
+
+    //Pour les cas où on ajoute au milieu et à la fin
+    while(courant->suivant != NULL){
+      fprintf(stderr, "On passe par là!\n");
+      precedent = courant->precedent;
+      if(value < courant->valeur){
+        /* La valeur à ajouter est inférieure à la valeur de courant alors
+         * le suivant de l'élément à ajouter va pointer sur courant
+         * on fait pointer le précédent de courant sur l'élément à ajouter
+         * le précédent de l'élément à ajouter va pointer sur précédent
+         * on fait pointer le suivant de précédent sur l'élément à ajouter
+         */
+        maillon->suivant = courant;
+        courant->precedent = maillon;
+        maillon->precedent = precedent;
+        if (precedent != NULL)
+        {
+          precedent->suivant = maillon;
+        }
 
         return 1;
       }
-
-      maillon->valeur = value;
-
-      if(!(deja_presente(*d, value))){
-        //On exécutera le reste uniquement si la valeur n'est pas présente dans le domaine
-        if((*d)->valeur > value){
-          /* Si la valeur à ajouter est inférieure à la première valeur du domaine alors
-           * on fait pointer le précédent du domaine sur l'élément à ajouter
-           * et on fait commencer le domaine au nouvel élément
-           */
-          (*d)->precedent = maillon;
-          maillon->suivant = *d;
-
-          *d = maillon;
-
-          return 1;
-        }
-
-        //Pour les cas où on ajoute au milieu et à la fin
-        while(courant != NULL){
-          if(value < courant->valeur){
-            /* La valeur à ajouter est inférieure à la valeur de courant alors
-             * le suivant de l'élément à ajouter va pointer sur courant
-             * on fait pointer le précédent de courant sur l'élément à ajouter
-             * le précédent de l'élément à ajouter va pointer sur précédent
-             * on fait pointer le suivant de précédent sur l'élément à ajouter
-             */
-            maillon->suivant = courant;
-            courant->precedent = maillon;
-            maillon->precedent = precedent;
-            precedent->suivant = maillon;
-
-            return 1;
-          }
-          //On fait avancer les itérateurs
-          precedent = courant;
-          courant = courant->suivant;
-        }
-
-        if(courant == NULL){
-          /*On a parcouru tout le domaine sans insérer d'élément
-           * c'est donc que sa valeur est supérieure à toutes les autres valeurs du domaine
-           * on fait donc pointer le suivant de précédent sur l'élément à ajouter
-           * on met le suivant de l'élément à ajouter à NULL puisqu'il est le dernier élément du domaine
-           */
-          precedent->suivant = maillon;
-          maillon->suivant = NULL;
-
-          return 1;
-        }
-      }
-      return 0;
+      //On fait avancer les itérateurs
+      courant = courant->suivant;
     }
+
+    if(courant->suivant == NULL){
+      /*On a parcouru tout le domaine sans insérer d'élément
+       * c'est donc que sa valeur est supérieure à toutes les autres valeurs du domaine
+       * on fait donc pointer le suivant de précédent sur l'élément à ajouter
+       * on met le suivant de l'élément à ajouter à NULL puisqu'il est le dernier élément du domaine
+       */
+
+       if (courant->valeur > value)
+       {
+         courant->precedent->suivant = maillon;
+         maillon->precedent = courant->precedent;
+         courant->precedent = maillon;
+         maillon->suivant = courant;
+
+         return 1;
+       }
+
+      courant->suivant = maillon;
+      maillon->precedent = courant;
+      maillon->suivant = NULL;
+
+      return 1;
+    }
+  }
+  return 0;
+}
 
     int obtenir_valeur(domaine d, int indice){
       /*
@@ -263,7 +279,7 @@
       }
       return new_d;
     }
-    
+
     void vider_domaine(domaine d){
         if(d != NULL){
            vider_domaine(d->suivant);
