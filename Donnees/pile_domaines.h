@@ -15,6 +15,6 @@ void empiler(pile_domaines *p, domaine d);
 void depiler(pile_domaines *p);
 void afficher_pile(pile_domaines p);
 void vider_pile_domaines(pile_domaines p);
-void vider2_pile_domaine(pile_domaines p);
+void vider2_pile_domaines(pile_domaines p);
 
 #endif
