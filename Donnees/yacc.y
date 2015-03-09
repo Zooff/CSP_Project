@@ -335,6 +335,7 @@ int main(int argc, char* argv[])
     fclose(yyin);
 
     affecterContraintesDansVariables(listeVariables, &listeContraintes, nombreVariable);
+    initialiserValeurVariables(listeVariables);
     
         // affichage resultat
     afficher_liste(listeVariables);
