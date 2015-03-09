@@ -1,6 +1,7 @@
 %{
 #include "arbre.h"
 #include "variable.h"
+#include "backtrack.h"
     
 extern int yylex(); /* pour supprimer un warning */
 extern int yyerror(); /* pour supprimer un warning */
@@ -339,6 +340,10 @@ int main(int argc, char* argv[])
     
         // affichage resultat
     afficher_liste(listeVariables);
+    resolutionBacktrackUneSolution(listeVariables);
+
+    initialiserValeurVariables(listeVariables);
+    resolutionBacktrackToutesSolutions(listeVariables);
 
         // vidages
     vider_pile_domaines(listeDomaines);
