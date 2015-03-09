@@ -15,6 +15,7 @@ variables ajouter_var(variables V, char* nom_var){
   new->id = -1;
   new->nom = nom_var;
   new->contraintes = creer_liste_contrainte();
+  new->domaines = creer_pile_domaines();
   new->precedent = NULL;
   new->suivant = V;
   if (V != NULL)
@@ -58,6 +59,7 @@ void liberer_liste(variables V){
     courant = V;
     V = V->suivant;
     vider_liste_contrainte(courant->contraintes);
+    vider2_pile_domaine(courant->domaines);
     free(courant->nom);
     free(courant);
   }
