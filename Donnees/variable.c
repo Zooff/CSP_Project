@@ -209,3 +209,10 @@ void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nomb
   }
   vider_liste_contrainte(*lc);// arriver ici, si il reste des contraintes dans lc, elles ne font intervenir aucune variable donc des contraintes inutiles donnes par un utilisateur soucieux d'embeter le codeur de ce programme. cette derniere ligne lui est dedicacee.
 }
+
+void initialiserValeurVariables(variables V){
+  while(V != NULL){
+    V->valeur = (float)(V->domaines->dom->valeur - 1);
+    V = V->suivant;
+  }
+}
