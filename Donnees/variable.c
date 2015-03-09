@@ -56,13 +56,11 @@ void liberer_liste(variables V){
   while (V != NULL){
     courant = V;
     V = V->suivant;
+    vider_pile_domaines(courant->domaines);
     vider_liste_contrainte(courant->contraintes);
     free(courant->nom);
     free(courant);
   }
-  vider_liste_contrainte(courant->contraintes);
-  free(courant->nom);
-  free(courant);
 }
 
 variable* premiere_variable(variables V){
