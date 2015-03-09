@@ -59,7 +59,7 @@ void liberer_liste(variables V){
     courant = V;
     V = V->suivant;
     vider_liste_contrainte(courant->contraintes);
-    vider2_pile_domaine(courant->domaines);
+    vider2_pile_domaines(courant->domaines);
     free(courant->nom);
     free(courant);
   }
@@ -138,10 +138,8 @@ void afficher_variable(variable var){
 }
 
 void affecterDommaineDansVariables(variables V, domaine d){
-  pile_domaines p = creer_pile_domaines();
-  empiler(&p, d);
   while(V != NULL){
-    V->domaines = p;
+    empiler(&(V->domaines), d);
     V = V->suivant;
   }
 }
