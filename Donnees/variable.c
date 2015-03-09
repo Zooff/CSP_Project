@@ -88,7 +88,7 @@ int fin_de_liste(variables V){
 /* Fonction de gestion des variables */
 
 int affecter_valeur(variables V){
-  domaine d = V->domaines.dom;
+  domaine d = (V->domaines)->dom;
   while(d != NULL && V->valeur > d->valeur){
     d = d->suivant;
 
