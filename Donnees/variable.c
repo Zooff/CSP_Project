@@ -105,6 +105,7 @@ variable* suivante(variable* var){
 }
 
 variable* precedente(variable* var){
+  var->valeur = (float)(var->domaines->dom->valeur - 1);
   return var->precedent;
 }
 
