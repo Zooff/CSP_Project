@@ -82,4 +82,8 @@ int verifier_les_contraintes(variable* variable);
 //  - si la contrainte ne fait pas intervenir de variable d'indice plus grand
 // si il reste des contraintes non asignee a une variable en fin de cette procedure, on les supprime
 void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nombreVariable);
+
+// met la premiere valeur du domaine -1 dans chaque variable
+void initialiserValeurVariables(variables V);
+
   #endif
