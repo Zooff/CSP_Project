@@ -74,8 +74,8 @@ void afficher_liste_contrainte(listeContrainte l)
 char* creerTableauPresenceVariable(int nombreVariable)
 {
   char* presenceVariable = (char*) malloc((nombreVariable+1) * sizeof(char));// + 1 pour avoir le \0 en fin de chaine
-  presenceVariable[nombreVariable--] == '\0'
+  presenceVariable[nombreVariable--] = '\0';
   while(nombreVariable >= 0)// prepare le tableau de presence des variables dans la contrainte qu'on commence a lire en mettant toutes les cases a 0
     presenceVariable[nombreVariable--] = '0';// des qu'on trouve par la suite une variable dans la contrainte, on met l'indice de cette variable a '1' dans ce tableau
   return presenceVariable;
-};
+}
