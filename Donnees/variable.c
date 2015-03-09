@@ -14,6 +14,7 @@ variables ajouter_var(variables V, char* nom_var){
   variables new = (variables)xmalloc(1, sizeof(variable));
   new->id = -1;
   new->nom = nom_var;
+  new->contraintes = creer_liste_contrainte();
   new->precedent = NULL;
   new->suivant = V;
   if (V != NULL)
