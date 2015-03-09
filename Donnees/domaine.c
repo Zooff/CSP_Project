@@ -132,7 +132,7 @@
         printf("le domaine est vide\n");
 
       while(courant != NULL){
-        printf("%d\n", courant->valeur);
+        fprintf(stderr, "%d ", courant->valeur);
         courant = courant->suivant;
       }
     }
