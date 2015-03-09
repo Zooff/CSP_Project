@@ -56,7 +56,6 @@ void liberer_liste(variables V){
   while (V != NULL){
     courant = V;
     V = V->suivant;
-    vider_pile_domaines(courant->domaines);
     vider_liste_contrainte(courant->contraintes);
     free(courant->nom);
     free(courant);
@@ -119,6 +118,9 @@ void afficher_liste(variables V){
     if ( V->precedent == NULL)
       fprintf(stderr, "Debut \n");
     afficher_variable(*V);
+    fprintf(stderr, "Domaine: ");
+    afficher_domaine(V->domaines->dom);
+    afficher_liste_contrainte(V->contraintes);
     if (V->suivant == NULL)
       fprintf(stderr, "Fin\n");
     V = V->suivant;
