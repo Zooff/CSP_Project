@@ -44,9 +44,9 @@ void vider_pile_domaines(pile_domaines p){
   }
 }
 
-void vider2_pile_domaine(pile_domaines p){
+void vider2_pile_domaines(pile_domaines p){
   if(p != NULL){
-    vider_pile_domaines(p->precedent);
+    vider2_pile_domaines(p->precedent);
     free(p);
   }
 }
