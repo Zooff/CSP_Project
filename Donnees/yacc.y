@@ -337,11 +337,11 @@ int main(int argc, char* argv[])
     affecterContraintesDansVariables(listeVariables, &listeContraintes, nombreVariable);
     
         // affichage resultat
-    afficher_listeVariable(listeVariables);
+    afficher_liste(listeVariables);
 
         // vidages
-    vider_listeDomaine(listeDomaines);
-    vider_listeVariable(listeVariables);
+    vider_pile_domaines(listeDomaines);
+    liberer_liste(listeVariables);
     yylex_destroy();
     return EXIT_SUCCESS;
 }
