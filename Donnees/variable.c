@@ -89,7 +89,7 @@ int fin_de_liste(variables V){
 
 int affecter_valeur(variables V){
   domaine d = (V->domaines)->dom;
-  while(d != NULL && V->valeur > d->valeur){
+  while(d != NULL && V->valeur >= d->valeur){
     d = d->suivant;
 
   }
