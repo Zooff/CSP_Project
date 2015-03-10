@@ -86,4 +86,9 @@ void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nomb
 // met la premiere valeur du domaine -1 dans chaque variable
 void initialiserValeurVariables(variables V);
 
+// ajout des contraintes differents entre la variable dont le nom est dans nomVariable et toutes les variables dans la liste variablesAlldiff
+// fonction utile pour faire les contraintes ALLDIFF
+void ajouterContraintesDifferent(char* nomVariable, variables variablesAlldiff, listeContrainte* contraintes, variables V, int nombreVariable);
+
+
   #endif
