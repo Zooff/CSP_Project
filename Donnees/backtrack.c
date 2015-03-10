@@ -65,6 +65,8 @@ void resolutionBacktrackToutesSolutions(variables V)
                 Xi = suivante(Xi);
             }
             Xi = derniereVariable;
+            fprintf(stderr, "Appuyez sur entrée pour la prochaine solution\n");
+            fgetc(stdin);
         }
         else
             fprintf(stderr, "Plus de solution\n");
