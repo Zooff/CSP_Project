@@ -217,3 +217,26 @@ void initialiserValeurVariables(variables V){
     V = V->suivant;
   }
 }
+
+void ajouterContraintesDifferent(char* nomVariable, variables variablesAlldiff, listeContrainte* contraintes, variables V, int nombreVariable)
+{
+  int indiceNouvelleVarDiff, indiceVariableDiff;
+  variable* nouvelleVarDiff = retournerVariablePortantNom(V, nomVariable, &indiceNouvelleVarDiff);
+  variable* variableDiff;
+  char* presenceVariable;
+  arbre a, fils1, fils2;
+  while( !fin_de_liste(variablesAlldiff) )
+  {
+    presenceVariable = creerTableauPresenceVariable(nombreVariable);
+    presenceVariable[indiceNouvelleVarDiff] = '1';
+    variableDiff = retournerVariablePortantNom(V, variablesAlldiff->nom, &indiceVariableDiff);
+    presenceVariable[indiceVariableDiff] = '1';        
+    a = cons_noeud(A_DIFFERENT, NULL);
+    fils1 = cons_noeud(A_IDF, &(variableDiff->valeur));
+    fils2 = cons_noeud(A_IDF, &(nouvelleVarDiff->valeur));
+    fils1 = attache_papa_frangin(fils1, fils2);
+    a = attache_papa_fils(a, fils1);
+    ajouter_contrainte(contraintes, a, presenceVariable);
+    variablesAlldiff = variablesAlldiff->suivant;
+  }
+}
