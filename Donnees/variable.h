@@ -10,7 +10,6 @@
 #include "xmalloc.h"
 #include "pile_domaines.h"
 #include "listeContrainte.h"
-#include "listes.h"
 
 extern int num_ligne; // recouvre la variable num_ligne du fichier lex.l
 
