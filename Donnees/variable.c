@@ -216,3 +216,8 @@ void initialiserValeurVariables(variables V){
     V = V->suivant;
   }
 }
+
+int est_initialise(variables V){
+
+  return (V->valeur == (V->domaines->dom->valeur -1))
+}

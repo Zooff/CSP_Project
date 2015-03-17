@@ -86,4 +86,7 @@ void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nomb
 // met la premiere valeur du domaine -1 dans chaque variable
 void initialiserValeurVariables(variables V);
 
+// Indique si la variable est initiailis
+int est_initialise(variables V);
+
   #endif
