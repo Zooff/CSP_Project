@@ -3,7 +3,7 @@
 arbre cons_noeud(int nature, float* valeur)
 {
   arbre a = (arbre)malloc(1 * sizeof(noeud)); /* allocation dynamique d'un noeud */
-  if(nature != A_IDF)
+  if(nature == A_ENTIER || nature == A_REEL || nature == A_BOOLEEN)
     a->valeur = (float*) malloc(1 * sizeof(float));
   else
     a->valeur = valeur;

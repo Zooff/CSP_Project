@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -lm -g
 LDFLAGS =
-LISTE = y.tab.c lex.o variable.o xmalloc.o domaine.o pile_domaines.o arbre.o  listeContrainte.o
+LISTE = y.tab.c lex.o variable.o xmalloc.o domaine.o pile_domaines.o arbre.o  listeContrainte.o backtrack.o
 
 all: main clean
 

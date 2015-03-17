@@ -1,6 +1,7 @@
 %{
 #include "arbre.h"
 #include "variable.h"
+#include "backtrack.h"
     
 extern int yylex(); /* pour supprimer un warning */
 extern int yyerror(); /* pour supprimer un warning */
@@ -13,6 +14,7 @@ listeContrainte listeContraintes;
 
 variables listeVariables; // la grande liste de toutes les variables
 variables variablesPartageantDomaine; // une sous liste des variables ayant le meme domaine. cette liste contiendra pendant l'analyse chaque liste ayant un domaine
+variables variablesAlldiff; // stocke les variables d'un alldiff pour pouvoir ajouter les contraintes != entre chaque couple de cette liste
 domaine domaineVariable; // ce domaine contiendra pendant l'analyse chaque domaine communs aux variables dans variablePartageantDomaine
 domaine domaineVariable2;
 ; // ce domaine est utile pour en faire l'union avec le premier. c'est dans celui ci qu'on ajoute les valeurs. puis en fin d'ajout, on fait l'union entre le premier et le deuxieme qu'on stocke dans le premier
@@ -146,8 +148,29 @@ expression
 { // on a fini d'analyser la contrainte. on ajoute un maillon dans la liste des contraintes pour celle-ci en donnant son arbre et son tableau de presence des variables
     ajouter_contrainte(&listeContraintes, $2, presenceVariable);
 }
-| ALLDIFF PO liste_variables PF
+| ALLDIFF
+{
+    variablesAlldiff = creer_liste_var_vide();
+}
+PO liste_variables_alldiff PF
+{
+    liberer_liste(variablesAlldiff);
+}
 ;
+
+liste_variables_alldiff:
+IDF VIRGULE liste_variables_alldiff
+{ // si on trouve une nouvelle variable dans le ALLDIFF, on doit ajouter les contraintes different entre cette nouvelle variable et toutes les autres precedement rencontree (qu'on stocke dans la liste variablesAlldiff)
+    ajouterContraintesDifferent($1, variablesAlldiff, &listeContraintes, listeVariables, nombreVariable);
+    variablesAlldiff = ajouter_var(variablesAlldiff, $1);
+}
+| IDF
+{
+    ajouterContraintesDifferent($1, variablesAlldiff, &listeContraintes, listeVariables, nombreVariable);
+    variablesAlldiff = ajouter_var(variablesAlldiff, $1);
+}
+;
+
 
 expression:
 expression1
@@ -339,6 +362,10 @@ int main(int argc, char* argv[])
     
         // affichage resultat
     afficher_liste(listeVariables);
+    resolutionBacktrackUneSolution(listeVariables);
+
+    initialiserValeurVariables(listeVariables);
+    resolutionBacktrackToutesSolutions(listeVariables);
 
         // vidages
     vider_pile_domaines(listeDomaines);
