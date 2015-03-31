@@ -9,6 +9,9 @@ void resolutionBacktrackUneSolution(variables V)
     {
         while( (booleen=affecter_valeur(Xi)) )
         {
+			if(forwardChecking)
+				forward_check(Xi);
+			
             booleen = verifier_les_contraintes(Xi);
             if(booleen == 1)
                 break;
@@ -71,4 +74,25 @@ void resolutionBacktrackToutesSolutions(variables V)
         else
             fprintf(fileToWrite, "Plus de solution\n");
     }
+}
+
+
+void forward_check(variables X_instanciee){
+	variables V = suivante(X_instanciee);
+	listeContrainte l;
+	domaine D;
+	while( !fin_de_liste(V)){
+		l = V->contraintes;
+		while(l!= NULL){
+			if((l->presenceVariable)[X_instanciee->id]=='1') {
+				while(affecter_valeur(V)){
+					if (evalue_contrainte(l->a))
+						ajouter_valeur(&D,V->valeur);
+					empiler(&(V->domaines), D) ;
+				}
+			}
+			l = l->suivant;
+		}
+	}
+	V = suivante(V);
 }

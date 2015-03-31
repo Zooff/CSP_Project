@@ -16,6 +16,9 @@ int typeCSP;
 int modeSilence;
 FILE* fileToWrite;
 
+extern int forwardChecking;
+
+
 typedef struct variable{
   int id; // Chaque variable possède un id unique (initialement à -1, valeur fixé lors du tri des variables)
   char * nom; // Nom de la variable
