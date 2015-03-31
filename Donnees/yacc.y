@@ -2,6 +2,7 @@
 #include "arbre.h"
 #include "variable.h"
 #include "backtrack.h"
+#include <unistd.h>
     
 extern int yylex(); /* pour supprimer un warning */
 extern int yyerror(); /* pour supprimer un warning */
@@ -343,8 +344,72 @@ int yyerror()
     return 0;
 }
 
+void usage(char* prog){
+	fprintf(stderr, "Usage : %s [-a nombre] [-o fichier_où_ecrire] [-s] [-t nombre] [-v] [-z] fichier_contenant_le_CSP\n", prog);
+	fprintf(stderr, "\t-a nombre : permet d'utiliser l'algorithme de numéro nombre, nombre peut prendre plusieurs valeurs :\n");
+	fprintf(stderr, "\t\t1 : l'algorithme utilisé sera l'algorithme de backtrack (comportement de base si l'option n'est pas renseignée)\n");
+	fprintf(stderr, "\t\tTO DO\n");
+	fprintf(stderr, "\t-o fichier_où_ecrire : le résultat du CSP sera écrit dans le fichier fichier_où_ecrire\n");
+	fprintf(stderr, "\t-s : active le mode silence\n");
+	fprintf(stderr, "\t-t nombre : permet de résoudre le CSP de numéro nombre, nombre peut prendre plusieurs valeurs :\n");
+	fprintf(stderr, "\t\t1 : le CSP résolu sera un CSP classique (comportement de base si l'option n'est pas renseignée)\n");
+	fprintf(stderr, "\t\t2 : le CSP résolu sera un sudoku\n");
+	fprintf(stderr, "\t\tTO DO\n");
+	fprintf(stderr, "\t-v : affiche la liste des variables\n");
+	fprintf(stderr, "\t-z : affiche les contributeurs du programme\n");
+	exit(EXIT_FAILURE);
+}
+
+		char c;
+		char* fileName;
+
+		int afficherContributeur = 0;
+		int algorithmeUtilise = 1;
+		int ecrireDansFichier = 0;
+		int listeVariable = 0;
+
 int main(int argc, char* argv[])
 {
+/* TO DO :
+* gérer les types de CSP
+*/
+		
+		fileToWrite = stderr;
+		typeCSP = 1;
+		modeSilence = 0;
+		opterr = 0; //on bloque les messages d'erreurs de getopt
+		
+		while((c = getopt(argc, argv, "a:o:st:vz")) != -1){
+			switch (c) {
+			case 'a':
+				algorithmeUtilise = atoi(optarg);
+				break;
+			case 'o':
+				ecrireDansFichier++;
+				fileToWrite = fopen(optarg, "w");
+				break;
+			case 's':
+				modeSilence++;
+				break;
+			case 't':
+				typeCSP = atoi(optarg);
+				break;
+			case 'v':
+				listeVariable++;
+				break;
+			case 'z' :
+				afficherContributeur++;
+				break;
+			default:
+				usage(argv[0]);
+			}
+		}
+		
+		if (optind < argc)
+			fileName = argv[optind];
+		else{
+			usage(argv[0]);
+		}
 
         // initialisations
     listeVariables = creer_liste_var_vide();
@@ -353,7 +418,7 @@ int main(int argc, char* argv[])
     listeDomaines = creer_pile_domaines();
 
         //analyse du fichier
-    yyin=fopen("csp.txt", "r"); /* ouverture du fichier contenant le CSP */
+    yyin=fopen(fileName, "r"); /* ouverture du fichier contenant le CSP */
     yyparse();
     fclose(yyin);
 
@@ -361,11 +426,26 @@ int main(int argc, char* argv[])
     initialiserValeurVariables(listeVariables);
     
         // affichage resultat
-    afficher_liste(listeVariables);
-    resolutionBacktrackUneSolution(listeVariables);
+		if(listeVariable)
+	    afficher_liste(listeVariables);
+    
 
     initialiserValeurVariables(listeVariables);
-    resolutionBacktrackToutesSolutions(listeVariables);
+
+    
+    switch(algorithmeUtilise){
+			case 1 :
+				//super fonction qui fait toutes
+				fprintf(fileToWrite, "FONCTION QUI FAIT TOUT\n");
+				break;
+			default :
+				fprintf(fileToWrite, "IL Y A QU'UN ALGO\n");
+				usage(argv[0]);
+    }
+    
+
+		if(afficherContributeur)
+			//afficherContributeur();
 
         // vidages
     vider_pile_domaines(listeDomaines);

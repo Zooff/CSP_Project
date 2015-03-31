@@ -32,7 +32,7 @@ variables supprimer_variable(variables V, char* nom_var){
     courant = courant->suivant;
 
   if (courant == NULL){
-    fprintf(stderr, " Suppresion impossible\n");
+    fprintf(fileToWrite, " Suppresion impossible\n");
     return V;
   }
 
@@ -120,20 +120,20 @@ void afficher_liste(variables V){
 
   while(V != NULL){
     if ( V->precedent == NULL)
-      fprintf(stderr, "Debut \n");
+      fprintf(fileToWrite, "Debut \n");
     afficher_variable(*V);
-    fprintf(stderr, "Domaine: ");
+    fprintf(fileToWrite, "Domaine: ");
     afficher_domaine(V->domaines->dom);
     afficher_liste_contrainte(V->contraintes);
     if (V->suivant == NULL)
-      fprintf(stderr, "Fin\n");
+      fprintf(fileToWrite, "Fin\n");
     V = V->suivant;
   }
 }
 
 void afficher_variable(variable var){
 
-  fprintf(stderr, "Nom : %s Valeur : %d, ID : %d\n", var.nom, (int)(var.valeur), var.id);
+  fprintf(fileToWrite, "Nom : %s Valeur : %d, ID : %d\n", var.nom, (int)(var.valeur), var.id);
 
 
 }
@@ -164,7 +164,7 @@ variable* retournerVariablePortantNom(variables V, char* nom, int* indiceVariabl
     i++;
   }
   if(V == NULL){
-    fprintf(stderr, "Erreur ligne %d, utilisation d'une variable '%s' sans la declarer auparavant en donnant son domaine, le programme quitte donc.\n", num_ligne, nom);
+    fprintf(fileToWrite, "Erreur ligne %d, utilisation d'une variable '%s' sans la declarer auparavant en donnant son domaine, le programme quitte donc.\n", num_ligne, nom);
     exit(EXIT_FAILURE);
   }
   *indiceVariable = i;
@@ -239,4 +239,17 @@ void ajouterContraintesDifferent(char* nomVariable, variables variablesAlldiff, 
     ajouter_contrainte(contraintes, a, presenceVariable);
     variablesAlldiff = variablesAlldiff->suivant;
   }
+}
+
+void afficherResultat(variables V){
+	switch(typeCSP){
+		case 1 :
+			afficher_liste(V);
+			break;
+		case 2 :
+			fprintf(fileToWrite, "SUDOKU\n");
+			break;
+		default :
+			fprintf(fileToWrite, "Seulement 2 types\n");
+	}
 }

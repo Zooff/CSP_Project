@@ -12,6 +12,9 @@
 #include "listeContrainte.h"
 
 extern int num_ligne; // recouvre la variable num_ligne du fichier lex.l
+int typeCSP;
+int modeSilence;
+FILE* fileToWrite;
 
 typedef struct variable{
   int id; // Chaque variable possède un id unique (initialement à -1, valeur fixé lors du tri des variables)
@@ -60,6 +63,9 @@ void afficher_liste(variables V);
 
 // Fonction d'affichage d'une variable
 void afficher_variable(variable var);
+
+// Fonction d'affichage du résultat
+void afficherResultat(variables V);
 
 // Procédure d'affectation d'un domaine à une liste de variables. On créer une pile de domaines contenant d et on met cette pile dans V->domaines
 void affecterDommaineDansVariables(variables V, domaine d);
