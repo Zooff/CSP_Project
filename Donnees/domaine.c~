@@ -144,7 +144,7 @@
       domaine courant = d;
 
       if(est_vide(d))
-        fprintf(fileToWrite, "le domaine est vide\n");
+        printf("le domaine est vide\n");
 
       while(courant != NULL){
         fprintf(fileToWrite, "%d ", courant->valeur);

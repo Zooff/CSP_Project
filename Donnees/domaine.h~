@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern FILE* fileToWrite;
-
     struct s_element{
       int valeur; //Un élément du domaine possède une valeur, ici un entier
 

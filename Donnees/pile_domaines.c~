@@ -13,7 +13,7 @@ void empiler(pile_domaines *p, domaine d){
     *p = new;
   }
   else
-    fprintf(fileToWrite, "Impossible d'empiler un domaine\n");
+    fprintf(stderr, "Impossible d'empiler un domaine\n");
 }
 
 void depiler(pile_domaines *p){
@@ -27,7 +27,7 @@ void depiler(pile_domaines *p){
 
 void afficher_pile(pile_domaines p){
 
-  fprintf(fileToWrite, "\nPile de domaines :\n");
+  fprintf(stderr, "\nPile de domaines :\n");
   
   while(p->precedent != NULL){
     afficher_domaine(p->dom);

@@ -40,7 +40,7 @@ void afficheArbre(arbre a, int espace)
 {
   int i;
   for(i=0 ; i<espace ; i++) /* indentation */
-    fprintf(fileToWrite, " ");
+    fprintf(stderr, " ");
   if(a != NULL)
   {
     afficheArbreBis(a); /* affiche en lettre la nature du noeud (qui est un int) */
@@ -48,38 +48,38 @@ void afficheArbre(arbre a, int espace)
     afficheArbre(a->frangin, espace); /* affichage du frangin avec une meme indentation pour donner l'impression d'un arbre en penchant la tete a gauche */
   }
   else
-    fprintf(fileToWrite, "ø\n");
+    fprintf(stderr, "ø\n");
 }
 
 void afficheArbreBis(arbre a)
 {
   switch(a->nature)
   {
-    case 10: fprintf(fileToWrite, "IDF");               break;
-    case 11: fprintf(fileToWrite, "ENTIER %d", (int)(*(a->valeur)));break;
-    case 12: fprintf(fileToWrite, "REEL %f", *(a->valeur));break;
-    case 13: fprintf(fileToWrite, "BOOLEEN, %d", (int)(*(a->valeur)));break;
-    case 14: fprintf(fileToWrite, "SQRT");              break;
-    case 15: fprintf(fileToWrite, "SIN");               break;
-    case 16: fprintf(fileToWrite, "COS");               break;
-    case 17: fprintf(fileToWrite, "TAN");               break;
-    case 18: fprintf(fileToWrite, "ET");                break;
-    case 19: fprintf(fileToWrite, "OU");                break;
-    case 20: fprintf(fileToWrite, "NON");               break;
-    case 21: fprintf(fileToWrite, "EGAL");              break;
-    case 22: fprintf(fileToWrite, "DIFFERENT");         break;
-    case 23: fprintf(fileToWrite, "SUPERIEUR_OU_EGAL"); break;
-    case 24: fprintf(fileToWrite, "INFERIEUR_OU_EGAL"); break;
-    case 25: fprintf(fileToWrite, "SUPERIEUR");         break;
-    case 26: fprintf(fileToWrite, "INFERIEUR");         break;
-    case 27: fprintf(fileToWrite, "PLUS");              break;
-    case 28: fprintf(fileToWrite, "MOINS");             break;
-    case 29: fprintf(fileToWrite, "MULTIPLIE_PAR");     break;
-    case 30: fprintf(fileToWrite, "DIVISE_PAR");        break;
-    case 31: fprintf(fileToWrite, "MODULO");            break;
-    default: fprintf(fileToWrite, "noeud inconnu");
+    case 10: fprintf(stderr, "IDF");               break;
+    case 11: fprintf(stderr, "ENTIER %d", (int)(*(a->valeur)));break;
+    case 12: fprintf(stderr, "REEL %f", *(a->valeur));break;
+    case 13: fprintf(stderr, "BOOLEEN, %d", (int)(*(a->valeur)));break;
+    case 14: fprintf(stderr, "SQRT");              break;
+    case 15: fprintf(stderr, "SIN");               break;
+    case 16: fprintf(stderr, "COS");               break;
+    case 17: fprintf(stderr, "TAN");               break;
+    case 18: fprintf(stderr, "ET");                break;
+    case 19: fprintf(stderr, "OU");                break;
+    case 20: fprintf(stderr, "NON");               break;
+    case 21: fprintf(stderr, "EGAL");              break;
+    case 22: fprintf(stderr, "DIFFERENT");         break;
+    case 23: fprintf(stderr, "SUPERIEUR_OU_EGAL"); break;
+    case 24: fprintf(stderr, "INFERIEUR_OU_EGAL"); break;
+    case 25: fprintf(stderr, "SUPERIEUR");         break;
+    case 26: fprintf(stderr, "INFERIEUR");         break;
+    case 27: fprintf(stderr, "PLUS");              break;
+    case 28: fprintf(stderr, "MOINS");             break;
+    case 29: fprintf(stderr, "MULTIPLIE_PAR");     break;
+    case 30: fprintf(stderr, "DIVISE_PAR");        break;
+    case 31: fprintf(stderr, "MODULO");            break;
+    default: fprintf(stderr, "noeud inconnu");
   }
-  fprintf(fileToWrite, "\n");
+  fprintf(stderr, "\n");
 }
 
 float evalue_contrainte(arbre a)

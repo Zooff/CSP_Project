@@ -441,7 +441,6 @@ int main(int argc, char* argv[])
 				break;
                         case 2:
 	resolutionBacktrackToutesSolutions(listeVariables);
-				break;
 			default :
 				fprintf(fileToWrite, "Numero d'algo de resolution inconnu\n");
 				usage(argv[0]);

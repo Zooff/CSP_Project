@@ -3,8 +3,6 @@
 
 #include "arbre.h"
 
-extern FILE* fileToWrite;
-
 typedef struct maillonContrainte
 {
   arbre a; // arbre des contraintes

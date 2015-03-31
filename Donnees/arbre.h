@@ -28,6 +28,8 @@
 #define A_DIVISE_PAR 30
 #define A_MODULO 31
 
+extern FILE* fileToWrite;
+
 typedef struct noeud
 {
   int nature; /* prend la valeur d'une des constantes ci dessus */

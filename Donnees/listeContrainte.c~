@@ -60,15 +60,15 @@ void vider_liste_contrainte(listeContrainte l)
 void afficher_liste_contrainte(listeContrainte l)
 {
   int i=1;
-  fprintf(fileToWrite, "Debut d'affichage d'un ensemble de contraintes");
+  fprintf(stderr, "Debut d'affichage d'un ensemble de contraintes");
   while(l != NULL)
   {
-    fprintf(fileToWrite, "\nPresence de variables dans contrainte %d: %s\n", i, l->presenceVariable);
-    fprintf(fileToWrite, "Arbre de contrainte %d:\n", i++);
+    fprintf(stderr, "\nPresence de variables dans contrainte %d: %s\n", i, l->presenceVariable);
+    fprintf(stderr, "Arbre de contrainte %d:\n", i++);
     afficheArbre(l->a, 0);
     l = l->suivant;
   }
-  fprintf(fileToWrite, "Fin d'affichage d'un ensemble de contraintes\n");
+  fprintf(stderr, "Fin d'affichage d'un ensemble de contraintes\n");
 }
 
 char* creerTableauPresenceVariable(int nombreVariable)
