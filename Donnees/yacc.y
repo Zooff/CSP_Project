@@ -1,44 +1,39 @@
 %{
 #include "arbre.h"
 #include "variable.h"
-#include "backtrack.h"
-#include <unistd.h>
     
-extern int yylex(); /* pour supprimer un warning */
-extern int yyerror(); /* pour supprimer un warning */
-extern FILE* yyin; /* pour remplacer stdin par un fichier */
-extern void yylex_destroy();
+	extern int yylex(); /* pour supprimer un warning */
+	extern int yyerror(); /* pour supprimer un warning */
 
-extern FILE* fileToWrite;
+	extern FILE* fileToWrite;
 
-extern int num_ligne; // recouvre la variable num_ligne du fichier lex.l
+	extern int num_ligne; // recouvre la variable num_ligne du fichier lex.l
 
-listeContrainte listeContraintes;
+	listeContrainte listeContraintes;
 
-variables listeVariables; // la grande liste de toutes les variables
-variables variablesPartageantDomaine; // une sous liste des variables ayant le meme domaine. cette liste contiendra pendant l'analyse chaque liste ayant un domaine
-variables variablesAlldiff; // stocke les variables d'un alldiff pour pouvoir ajouter les contraintes != entre chaque couple de cette liste
-domaine domaineVariable; // ce domaine contiendra pendant l'analyse chaque domaine communs aux variables dans variablePartageantDomaine
-domaine domaineVariable2;
-; // ce domaine est utile pour en faire l'union avec le premier. c'est dans celui ci qu'on ajoute les valeurs. puis en fin d'ajout, on fait l'union entre le premier et le deuxieme qu'on stocke dans le premier
-pile_domaines listeDomaines; // comme un domaine peut etre commun a plusieurs variable, la liberation d'un domaine ne peut se faire avec la liberation d'une variable. on stock tous les domaines dans cette liste pour tous les vider correctement en fin du programme
+	variables listeVariables; // la grande liste de toutes les variables
+	variables variablesPartageantDomaine; // une sous liste des variables ayant le meme domaine. cette liste contiendra pendant l'analyse chaque liste ayant un domaine
+	variables variablesAlldiff; // stocke les variables d'un alldiff pour pouvoir ajouter les contraintes != entre chaque couple de cette liste
+	domaine domaineVariable; // ce domaine contiendra pendant l'analyse chaque domaine communs aux variables dans variablePartageantDomaine
+	domaine domaineVariable2;
+	; // ce domaine est utile pour en faire l'union avec le premier. c'est dans celui ci qu'on ajoute les valeurs. puis en fin d'ajout, on fait l'union entre le premier et le deuxieme qu'on stocke dans le premier
+	pile_domaines listeDomaines; // comme un domaine peut etre commun a plusieurs variable, la liberation d'un domaine ne peut se faire avec la liberation d'une variable. on stock tous les domaines dans cette liste pour tous les vider correctement en fin du programme
 
-variable* var;
+	variable* var;
 
 
-int forwardChecking =0;
-int nombreVariable = 0;
-int indiceVariable;
+	int nombreVariable = 0;
+	int indiceVariable;
 
-char* presenceVariable; // chaine de 0 et 1. si presenceVariable[i] == 1, alors il y a la variable d'indice i dans l'arbre de la contrainte, sinon elle n'y est pas
+	char* presenceVariable; // chaine de 0 et 1. si presenceVariable[i] == 1, alors il y a la variable d'indice i dans l'arbre de la contrainte, sinon elle n'y est pas
 
-%}
+	%}
 
 %union
-{
-    arbre arbre;
-    float valeur;
-    char* chaine;
+ {
+	 arbre arbre;
+	 float valeur;
+	 char* chaine;
 }
 
 %type <chaine> IDF
@@ -59,7 +54,19 @@ char* presenceVariable; // chaine de 0 et 1. si presenceVariable[i] == 1, alors 
 
 %%
 programme:
-XD liste_var_dom C liste_contraintes
+XD
+{
+	// initialisations
+    listeVariables = creer_liste_var_vide();
+    domaineVariable2 = creer_domaine();
+    listeContraintes = creer_liste_contrainte();
+    listeDomaines = creer_pile_domaines();
+}
+liste_var_dom C liste_contraintes
+{
+    affecterContraintesDansVariables(listeVariables, &listeContraintes, nombreVariable);
+    initialiserValeurVariables(listeVariables);
+}
 ;
 
 liste_var_dom:
@@ -344,120 +351,4 @@ int yyerror()
 {
     fprintf(fileToWrite,"Erreur de syntaxe ligne %d\n", num_ligne);
     return 0;
-}
-
-void usage(char* prog){
-	fprintf(fileToWrite, "Usage : %s [-a nombre] [-o fichier_où_ecrire] [-s] [-t nombre] [-v] [-z] fichier_contenant_le_CSP\n", prog);
-	fprintf(fileToWrite, "\t-a nombre : permet d'utiliser l'algorithme de numéro nombre, nombre peut prendre plusieurs valeurs :\n");
-	fprintf(fileToWrite, "\t\t1 : l'algorithme utilisé sera l'algorithme de backtrack (comportement de base si l'option n'est pas renseignée)\n");
-	fprintf(fileToWrite, "\t\tTO DO\n");
-	fprintf(fileToWrite, "\t-o fichier_où_ecrire : le résultat du CSP sera écrit dans le fichier fichier_où_ecrire\n");
-	fprintf(fileToWrite, "\t-s : active le mode silence\n");
-	fprintf(fileToWrite, "\t-t nombre : permet de résoudre le CSP de numéro nombre, nombre peut prendre plusieurs valeurs :\n");
-	fprintf(fileToWrite, "\t\t1 : le CSP résolu sera un CSP classique (comportement de base si l'option n'est pas renseignée)\n");
-	fprintf(fileToWrite, "\t\t2 : le CSP résolu sera un sudoku\n");
-	fprintf(fileToWrite, "\t\tTO DO\n");
-	fprintf(fileToWrite, "\t-v : affiche la liste des variables\n");
-	fprintf(fileToWrite, "\t-z : affiche les contributeurs du programme\n");
-	exit(EXIT_FAILURE);
-}
-
-		char c;
-		char* fileName;
-
-		int afficherContributeur = 0;
-		int algorithmeUtilise = 1;
-		int ecrireDansFichier = 0;
-		int listeVariable = 0;
-
-int main(int argc, char* argv[])
-{
-/* TO DO :
-* gérer les types de CSP
-*/
-		
-		fileToWrite = stderr;
-		typeCSP = 1;
-		modeSilence = 0;
-		opterr = 0; //on bloque les messages d'erreurs de getopt
-		
-		while((c = getopt(argc, argv, "a:o:st:vz")) != -1){
-			switch (c) {
-			case 'a':
-				algorithmeUtilise = atoi(optarg);
-				break;
-			case 'o':
-				ecrireDansFichier++;
-				fileToWrite = fopen(optarg, "w");
-				break;
-			case 's':
-				modeSilence++;
-				break;
-			case 't':
-				typeCSP = atoi(optarg);
-				break;
-			case 'v':
-				listeVariable++;
-				break;
-			case 'z' :
-				afficherContributeur++;
-				break;
-			default:
-				usage(argv[0]);
-			}
-		}
-		
-		if (optind < argc)
-			fileName = argv[optind];
-		else{
-			usage(argv[0]);
-		}
-
-        // initialisations
-    listeVariables = creer_liste_var_vide();
-    domaineVariable2 = creer_domaine();
-    listeContraintes = creer_liste_contrainte();
-    listeDomaines = creer_pile_domaines();
-
-        //analyse du fichier
-    yyin=fopen(fileName, "r"); /* ouverture du fichier contenant le CSP */
-    yyparse();
-    fclose(yyin);
-
-    affecterContraintesDansVariables(listeVariables, &listeContraintes, nombreVariable);
-    initialiserValeurVariables(listeVariables);
-    
-        // affichage resultat
-		if(listeVariable)
-	    afficher_liste(listeVariables);
-    
-
-    initialiserValeurVariables(listeVariables);
-
-    
-    switch(algorithmeUtilise){
-			case 1 :
-	resolutionBacktrackUneSolution(listeVariables);
-				break;
-                        case 2:
-	resolutionBacktrackToutesSolutions(listeVariables);
-				break;
-			case 3:
-			forwardChecking = 1;
-		resolutionBacktrackUneSolution(listeVariables);
-				break;
-			default :
-				fprintf(fileToWrite, "Numero d'algo de resolution inconnu\n");
-				usage(argv[0]);
-    }
-    
-
-		if(afficherContributeur)
-			//afficherContributeur();
-
-        // vidages
-    vider_pile_domaines(listeDomaines);
-    liberer_liste(listeVariables);
-    yylex_destroy();
-    return EXIT_SUCCESS;
 }
