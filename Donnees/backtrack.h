@@ -4,8 +4,11 @@
 #include "variable.h"
 
 extern FILE* fileToWrite;
+extern int typeCSP;
 
 extern int forwardChecking;
+
+void afficheSolution(variables V);
 
 void resolutionBacktrackUneSolution(variables V);
 

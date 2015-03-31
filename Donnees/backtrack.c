@@ -1,5 +1,38 @@
 #include "backtrack.h"
 
+void afficheSolution(variables V)
+{
+	int i, j;
+	switch(typeCSP)
+	{
+	case 1: // type normale
+		while( !fin_de_liste(V) )
+        {
+            afficher_variable(*V);
+            V = suivante(V);
+        }
+		break;
+	case 2: // type sudoku
+		for(i=0 ; i<9 ; i++)
+		{ // affichage des 9 lignes
+			for(j=0 ; j<9 ; j++)
+			{ // affichages des 9 chiffres d'une ligne
+				if(j == 3 || j == 6)
+					fprintf(fileToWrite, "  ");
+				fprintf(fileToWrite, "%d ", (int)(V->valeur));
+				V = suivante(V);
+			}
+			if(i == 2 || i == 5)
+				fprintf(fileToWrite, "\n");
+			fprintf(fileToWrite, "\n");
+		}
+		fprintf(fileToWrite, "\n");
+		break;
+	default:
+		fprintf(fileToWrite, "Type de CSP inconnu\n");
+	}
+}
+
 void resolutionBacktrackUneSolution(variables V)
 {
     variable* Xi = premiere_variable(V);
@@ -25,12 +58,7 @@ void resolutionBacktrackUneSolution(variables V)
     if(booleen == 1)
     {
         fprintf(fileToWrite, "Solution fonctionnant:\n");
-        Xi = premiere_variable(V);
-        while( !fin_de_liste(Xi) )
-        {
-            afficher_variable(*Xi);
-            Xi = suivante(Xi);
-        }
+		afficheSolution(V);
     }
     else
         fprintf(fileToWrite, "Pas de solution\n");
@@ -61,12 +89,7 @@ void resolutionBacktrackToutesSolutions(variables V)
         if(existeSolution == 1)
         {
             fprintf(fileToWrite, "Solution fonctionnant:\n");
-            Xi = premiere_variable(V);
-            while( !fin_de_liste(Xi) )
-            {
-                afficher_variable(*Xi);
-                Xi = suivante(Xi);
-            }
+			afficheSolution(V);		
             Xi = derniereVariable;
             fprintf(fileToWrite, "Appuyez sur entrée pour la prochaine solution\n");
             fgetc(stdin);
