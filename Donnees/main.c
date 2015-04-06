@@ -19,7 +19,45 @@ extern void yyparse();
 
 void affichageContributeur()
 {
+	fprintf(fileToWrite, "\nContributeurs du projet:\n");
+	fprintf(fileToWrite, "Leo:\n");
+	fprintf(fileToWrite, "\tregroupement du travail des autres et vérification du fonctionement globale du projet\n");
+	fprintf(fileToWrite, "\tremplir lex et yacc d'instruction C (et correction de l'ordre des regles dans yacc et dans lex)\n");
+	fprintf(fileToWrite, "\tfonction main\n");
+	fprintf(fileToWrite, "\tmodule arbre\n");
+	fprintf(fileToWrite, "\tmodule listeContrainte\n");
+	fprintf(fileToWrite, "\tmodule backtrack\n");
+	fprintf(fileToWrite, "\tquelques fonctions du module variable\n");
+	fprintf(fileToWrite, "\tfichier de tests sudoku.txt et csp.txt\n\n");
 	
+	fprintf(fileToWrite, "Dimitri:\n");
+	fprintf(fileToWrite, "\tcreateur du github du projet (https://github.com/Zooff/CSP_Project)\n");
+	fprintf(fileToWrite, "\tMakefile\n");
+	fprintf(fileToWrite, "\tmodule variable\n\n");
+	
+	fprintf(fileToWrite, "françis:\n");
+	fprintf(fileToWrite, "\tmodule domaine\n");
+	fprintf(fileToWrite, "\trecuperation et traitement des arguments en ligne de commande\n");
+	fprintf(fileToWrite, "\tfonction d'usage du programme\n\n");
+	
+	fprintf(fileToWrite, "Line KévinG Josselin:\n");
+	fprintf(fileToWrite, "\tlex\n");
+	fprintf(fileToWrite, "\tyacc (sans instruction C)\n");
+	fprintf(fileToWrite, "\tun (seul) fichier de test\n\n");
+
+	fprintf(fileToWrite, "KévinV Damien Benjamin:\n");
+	fprintf(fileToWrite, "\tForward checking: (non fonctionnel du fait du groupe donnés devant faire le tri des variables)\n");
+	fprintf(fileToWrite, "\t\tCreation et empilement des domaines retrecis\n");
+	fprintf(fileToWrite, "\t\tdepilement des domaines lors du backtrack\n\n");
+	
+	fprintf(fileToWrite, "Julien:\n");
+	fprintf(fileToWrite, "\tmodule pile domaine\n\n");
+	
+	fprintf(fileToWrite, "Hugo:\n");
+	fprintf(fileToWrite, "\tCreateur du forum\n\n");
+
+	fprintf(fileToWrite, "Nabil:\n");
+	fprintf(fileToWrite, "\tTri des variables (non fonctionnel)\n\n");
 }
 
 void usage(char* prog){
