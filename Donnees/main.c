@@ -3,16 +3,17 @@
 #include "backtrack.h"
 
 extern FILE* yyin; /* pour remplacer stdin par un fichier */
-extern FILE* fileToWrite;
 
 extern variables listeVariables;
 extern pile_domaines listeDomaines;
 
+int typeCSP;
+int modeSilence;
+FILE* fileToWrite;
 int afficherContributeur = 0;
 int algorithmeUtilise = 1;
-int ecrireDansFichier = 0;
-int listeVariable = 0;
-int forwardChecking =0;
+int afficherListeVariable = 0;
+int forwardChecking = 0;
 
 extern void yylex_destroy();
 extern void yyparse();
@@ -82,7 +83,6 @@ int main(int argc, char* argv[])
 	char* fileName;
 	fileToWrite = stderr;
 	typeCSP = 1;
-	modeSilence = 0;
 	opterr = 0; //on bloque les messages d'erreurs de getopt
 		
 	while((c = getopt(argc, argv, "a:o:st:vz")) != -1){
@@ -91,7 +91,6 @@ int main(int argc, char* argv[])
 			algorithmeUtilise = atoi(optarg);
 			break;
 		case 'o':
-			ecrireDansFichier++;
 			fileToWrite = fopen(optarg, "w");
 			break;
 		case 's':
@@ -101,7 +100,7 @@ int main(int argc, char* argv[])
 			typeCSP = atoi(optarg);
 			break;
 		case 'v':
-			listeVariable++;
+			afficherListeVariable++;
 			break;
 		case 'z' :
 			afficherContributeur++;
@@ -122,7 +121,7 @@ int main(int argc, char* argv[])
     fclose(yyin);
     
 	// affichage resultat
-	if(listeVariable)
+	if(afficherListeVariable)
 	    afficher_liste(listeVariables);
 
     initialiserValeurVariables(listeVariables);

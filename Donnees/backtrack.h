@@ -7,6 +7,7 @@ extern FILE* fileToWrite;
 extern int typeCSP;
 
 extern int forwardChecking;
+extern int modeSilence;
 
 void afficheSolution(variables V);
 

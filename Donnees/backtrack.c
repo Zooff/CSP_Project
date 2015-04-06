@@ -37,7 +37,8 @@ void resolutionBacktrackUneSolution(variables V)
 {
     variable* Xi = premiere_variable(V);
     float booleen;
-    fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant une seule solution\n");
+	if(!modeSilence)
+		fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant une seule solution\n");
     while( !fin_de_liste(Xi) )
     {
         while( (booleen=affecter_valeur(Xi)) )
@@ -57,10 +58,11 @@ void resolutionBacktrackUneSolution(variables V)
 
     if(booleen == 1)
     {
-        fprintf(fileToWrite, "Solution fonctionnant:\n");
+		if(!modeSilence)
+			fprintf(fileToWrite, "Solution fonctionnant:\n");
 		afficheSolution(V);
     }
-    else
+    else if(!modeSilence)
         fprintf(fileToWrite, "Pas de solution\n");
 }
 
@@ -69,7 +71,8 @@ void resolutionBacktrackToutesSolutions(variables V)
     variable* Xi = premiere_variable(V);
     variable* derniereVariable = derniere_variable(V);
     float existeSolution = 1;
-    fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant toutes les solutions\n");
+	if(!modeSilence)
+		fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant toutes les solutions\n");
     while(existeSolution)
     {
         while( !fin_de_liste(Xi) )
@@ -88,13 +91,17 @@ void resolutionBacktrackToutesSolutions(variables V)
 
         if(existeSolution == 1)
         {
-            fprintf(fileToWrite, "Solution fonctionnant:\n");
+			if(!modeSilence)
+				fprintf(fileToWrite, "Solution fonctionnant:\n");
 			afficheSolution(V);		
             Xi = derniereVariable;
-            fprintf(fileToWrite, "Appuyez sur entrée pour la prochaine solution\n");
-            fgetc(stdin);
+			if(!modeSilence)
+			{
+				fprintf(fileToWrite, "Appuyez sur entrée pour la prochaine solution\n");
+				fgetc(stdin);
+			}
         }
-        else
+        else if(!modeSilence)
             fprintf(fileToWrite, "Plus de solution\n");
     }
 }
