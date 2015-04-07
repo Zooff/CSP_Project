@@ -14,6 +14,7 @@
 extern int num_ligne; // recouvre la variable num_ligne du fichier lex.l
 extern int typeCSP;
 extern int forwardChecking;
+extern int nombreVariable;
 
 typedef struct variable{
   int id; // Chaque variable possède un id unique (initialement à -1, valeur fixé lors du tri des variables)
@@ -26,6 +27,8 @@ typedef struct variable{
 } variable;
 
 typedef variable* variables;
+
+extern variables listeVariables;
 
 // Initialise un pointeur NULL
 variables creer_liste_var_vide();

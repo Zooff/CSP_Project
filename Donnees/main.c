@@ -29,7 +29,6 @@ void usage(char* prog){
 	fprintf(fileToWrite, "\t\t2 : le CSP résolu sera un sudoku\n");
 	fprintf(fileToWrite, "\t\tTO DO\n");
 	fprintf(fileToWrite, "\t-v : affiche la liste des variables\n");
-	fprintf(fileToWrite, "\t-z : affiche les contributeurs du programme\n");
 	exit(EXIT_FAILURE);
 }
 
@@ -41,7 +40,7 @@ int main(int argc, char* argv[])
 	typeCSP = 1;
 	opterr = 0; //on bloque les messages d'erreurs de getopt
 		
-	while((c = getopt(argc, argv, "a:o:st:vz")) != -1){
+	while((c = getopt(argc, argv, "a:o:st:v")) != -1){
 		switch (c) {
 		case 'a':
 			algorithmeUtilise = atoi(optarg);
