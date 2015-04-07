@@ -10,7 +10,6 @@ extern pile_domaines listeDomaines;
 int typeCSP;
 int modeSilence;
 FILE* fileToWrite;
-int afficherContributeur = 0;
 int algorithmeUtilise = 1;
 int afficherListeVariable = 0;
 int forwardChecking = 0;
@@ -59,9 +58,6 @@ int main(int argc, char* argv[])
 		case 'v':
 			afficherListeVariable++;
 			break;
-		case 'z' :
-			afficherContributeur++;
-			break;
 		default:
 			usage(argv[0]);
 		}
@@ -98,9 +94,6 @@ int main(int argc, char* argv[])
 		fprintf(fileToWrite, "Numero d'algo de resolution inconnu\n");
 		usage(argv[0]);
     }
-
-	if(afficherContributeur)
-		affichageContributeur();
 
 	// vidages
     vider_pile_domaines(listeDomaines);
