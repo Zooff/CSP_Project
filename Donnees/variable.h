@@ -94,6 +94,8 @@ void initialiserValeurVariables(variables V);
 // fonction utile pour faire les contraintes ALLDIFF
 void ajouterContraintesDifferent(char* nomVariable, variables variablesAlldiff, listeContrainte* contraintes, variables V, int nombreVariable);
 
-
+// fonction qui tri les variables par ordre decroissant du (nombre d'apparition dans contrainte divisé par taille du domaine)
+// puis affectation dans les ID dans l'ordre de la liste entre 0 et nombreVariable-1
+void tri_liste_variable();
 
 #endif
