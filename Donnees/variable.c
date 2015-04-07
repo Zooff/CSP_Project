@@ -268,3 +268,116 @@ void afficherResultat(variables V){
 		fprintf(fileToWrite, "Seulement 2 types\n");
 	}
 }
+
+void tri_liste_variable()
+{
+    if(nombreVariable == 1)// cas ou il n'y a que une variable
+    {
+         listeVariables->id = 0 ;
+         return;
+    }
+        
+    int i;
+    int* tab_nbr_apparition_variable = (int*) malloc(nombreVariable * sizeof(int)); // nombreVariable var global donné par le yacc
+    char* tab; // stocke le tableau presence variable d'une contrainte
+    listeContrainte newContrainte; // liste des contraintes d'une variabl
+    int fini = -1;
+    variables news = listeVariables, tampon , precedent, suivant;
+
+    for(i =0 ; i<nombreVariable ; i++) // initialisation du tableau a 0
+    {
+        tab_nbr_apparition_variable[i] = 0;
+    }
+
+    while( !(fin_de_liste(news)) ) // boucle remplissant le tableau avec les nbr d'aparition des variables dans les contraintes
+    {
+        newContrainte = news->contraintes;
+        while(newContrainte != NULL)
+        {
+            tab =newContrainte->presenceVariable ;
+            for(i =0 ; i<nombreVariable ; i++)
+            {
+                if(tab[i] == '1')
+                {
+                    tab_nbr_apparition_variable[i]++;
+                }
+            }
+            newContrainte = newContrainte->suivant;
+        }
+        news = news->suivant;
+    }
+
+    news = listeVariables;
+    i = 0;
+
+    while( !(fin_de_liste(news)) )
+    { // boucle affectant les id des dans les variables: nombre d'apparition contrainte divise par taille domaine
+        news->id = tab_nbr_apparition_variable[i++] / (float)taille(news->domaines->dom);
+        news = news->suivant;
+    }
+
+    while(fini != 1) // tri a bulle de la liste doublement chainée
+    {
+        fini = 1;
+        precedent = listeVariables;
+        news = precedent->suivant;
+        suivant = news->suivant;
+        tampon = precedent->precedent;
+
+        if(precedent->id < news->id) // cas particulier pour savoir si le pointeur en debut de liste doit changer
+        {
+            fini = 0;
+            precedent->suivant = suivant;
+            precedent->precedent = news;
+            news->suivant = precedent;
+            news->precedent = tampon;
+            if(suivant != NULL)
+                suivant->precedent = precedent;
+            tampon = precedent;
+            precedent = news;
+            news = tampon;
+
+            listeVariables = precedent;
+        }
+        tampon = precedent;
+        precedent = news;
+        news = suivant;
+        if(suivant != NULL)
+            suivant = suivant->suivant;
+        
+        while( ! fin_de_liste(news))
+        {
+            if(precedent->id < news->id)
+            {
+                fini = 0;
+                precedent->suivant = suivant;
+                precedent->precedent = news;
+                news->suivant = precedent;
+                news->precedent = tampon;
+                tampon->suivant = news;
+                
+                if(suivant != NULL)
+                    suivant->precedent = precedent;
+                
+                tampon = precedent;
+                precedent = news;
+                news = tampon;
+            }
+            tampon = precedent;
+            precedent = news;
+            news = suivant;
+            
+            if(suivant != NULL)
+                suivant = suivant->suivant;
+        }
+    }
+        // maintenant que les variables sont triées on leurs affectent un id correspondant de 0 a nombreVariable-1
+    news = listeVariables;
+    i=0;
+    while (! fin_de_liste(news) )
+    {
+        news->id = i++;
+        news = news->suivant;
+    }
+    free(tab_nbr_apparition_variable);
+}
