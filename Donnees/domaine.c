@@ -119,6 +119,55 @@
   return 0;
 }
 
+int retirer_valeur(domaine* d, int value)
+{
+	//Fonction qui retire la valeur donnée en argument au domaine.
+	if (!deja_presente(*d, value))
+	{
+		//Si la valeur est pas présente dans le domaine, on va même pas plus loin.
+		return 0;
+	}
+
+	if ((*d)->valeur == value)
+	{
+		//Si la valeur est la première de la liste, on l'enlève et change la liste pour qu'elle pointe sur la seconde.
+		domaine del = *d;
+		*d = (*d)->suivant;
+		free(del);
+		if (*d != NULL)
+		{
+			(*d)->precedent = NULL;
+		}
+		return 1;
+	}
+
+	domaine courant = *d;
+
+	while(courant != NULL)
+	{
+		//Dans les autres cas, recherche classique dans le domaine
+		if (courant->valeur == value)
+		{
+			if (courant->precedent == NULL)
+			{
+				fprintf(stderr, "Probleme! La valeur %d n'a pas de précédent alors qu'on est sensé être au milieu de la liste!\n", courant->valeur);
+			}
+			courant->precedent->suivant = courant->suivant;
+			if (courant->suivant != NULL)
+			{
+				//vérif si le suivant existe
+				courant->suivant->precedent = courant->precedent;
+			}
+			free(courant);
+			return 1;
+		}
+
+		courant = courant->suivant;
+	}
+
+	return 0;
+}
+
     int obtenir_valeur(domaine d, int indice){
       /*
        * Attention cette fonction fonctionne comme un tableau

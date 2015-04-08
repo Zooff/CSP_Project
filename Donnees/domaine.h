@@ -20,6 +20,7 @@ extern FILE* fileToWrite;
     int taille(domaine); //Renvoie la taille du domaine passé en argument
     int deja_presente(domaine , int); //Renvoie 1 si l'entier est déjà dans le domaine 0 sinon
     int ajouter_valeur(domaine* , int); //Renvoie 1 si la valeur a été ajoutée 0 sinon
+    int retirer_valeur(domaine* d, int value);//Renvoie 1 si la valeur donnée a été supprimé, 0 sinon.
     int obtenir_valeur(domaine, int); //Renvoie la valeur située à indice dans le domaine d
     void afficher_domaine(domaine); //Affiche le domaine passé en argument avec un valeur par ligne
     domaine dupliquer_domaine(domaine); //Duplique le domaine passer en argument
