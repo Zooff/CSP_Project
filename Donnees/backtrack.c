@@ -77,6 +77,7 @@ void resolutionBacktrackToutesSolutions(variables V)
     {
         while( !fin_de_liste(Xi) )
         {
+	  //arc_consistance(V);
             while( (existeSolution=affecter_valeur(Xi)) )
             {
                 existeSolution = verifier_les_contraintes(Xi);
@@ -84,9 +85,15 @@ void resolutionBacktrackToutesSolutions(variables V)
                     break;
             }
             if(existeSolution == 1)
+	      {
+		//majdomaineFC(V);
                 Xi = suivante(Xi);
+	      }
             else
+	      {
+		// depile_tout_domaine(V);
                 Xi = precedente(Xi);
+	      }
         }
 
         if(existeSolution == 1)

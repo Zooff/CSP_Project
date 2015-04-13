@@ -2,6 +2,7 @@
 #define _BACKTRACK
 
 #include "variable.h"
+#include "arc_consistance.h"
 
 extern FILE* fileToWrite;
 extern int typeCSP;

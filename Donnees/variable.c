@@ -381,3 +381,17 @@ void tri_liste_variable()
     }
     free(tab_nbr_apparition_variable);
 }
+
+int est_initialise(variables V){
+  return (V->valeur == (V->domaines->dom->valeur -1));
+}
+
+int longueur(variables V){
+  variable* Xi = premiere_variable(V);
+  int i=0;
+  while( !fin_de_liste(Xi) ){
+    i++;
+    Xi = suivante(Xi);
+  }
+  return i;
+}

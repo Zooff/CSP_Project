@@ -100,5 +100,7 @@ void ajouterContraintesDifferent(char* nomVariable, variables variablesAlldiff, 
 // fonction qui tri les variables par ordre decroissant du (nombre d'apparition dans contrainte divisé par taille du domaine)
 // puis affectation dans les ID dans l'ordre de la liste entre 0 et nombreVariable-1
 void tri_liste_variable();
+int est_initialise(variables V);
+int longueur(variables V);
 
 #endif
