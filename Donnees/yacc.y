@@ -64,6 +64,7 @@ XD
 }
 liste_var_dom C liste_contraintes
 {
+    tri_liste_variable();
     affecterContraintesDansVariables(listeVariables, &listeContraintes, nombreVariable);
     initialiserValeurVariables(listeVariables);
 }

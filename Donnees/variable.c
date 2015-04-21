@@ -112,7 +112,7 @@ variable* precedente(variable* var){
 		while( !fin_de_liste(V)){
 			l = V->contraintes;
 			while(l!= NULL){
-				if(l->presenceVariable[var->id]=='1') {
+				if(l->presenceVariable[(int)var->id]=='1') {
 					depiler(&(V->domaines));
 				}
 				l = l->suivant;
@@ -148,7 +148,7 @@ void afficher_liste(variables V){
 
 void afficher_variable(variable var){
 
-	fprintf(fileToWrite, "Nom : %s Valeur : %d, ID : %d\n", var.nom, (int)(var.valeur), var.id);
+	fprintf(fileToWrite, "Nom : %s Valeur : %d, ID : %d\n", var.nom, (int)(var.valeur), (int)var.id);
 
 
 }
@@ -269,47 +269,58 @@ void afficherResultat(variables V){
 	}
 }
 
+
+void changerTableauxPresence(int i1, int i2)
+{
+	listeContrainte newContrainte = listeContraintes; // liste de toutes les contraintes du csp
+	char* tab; // stocke le tableau presence variable d'une contrainte
+	char tampon ;
+
+	while(newContrainte != NULL)
+	{
+		tab =newContrainte->presenceVariable ;
+		tampon = tab[i1];
+		tab[i1] = tab[i2];
+		tab[i2]= tampon;
+		newContrainte = newContrainte->suivant;
+	}		
+}
+
 void tri_liste_variable()
 {
     if(nombreVariable == 1)// cas ou il n'y a que une variable
     {
-         listeVariables->id = 0 ;
-         return;
+		listeVariables->id = 0 ;
+		return;
     }
         
     int i;
     int* tab_nbr_apparition_variable = (int*) malloc(nombreVariable * sizeof(int)); // nombreVariable var global donné par le yacc
     char* tab; // stocke le tableau presence variable d'une contrainte
-    listeContrainte newContrainte; // liste des contraintes d'une variabl
+    listeContrainte newContrainte = listeContraintes; // liste de toutes les contraintes du csp
     int fini = -1;
     variables news = listeVariables, tampon , precedent, suivant;
+    int indice1,indice2;
 
     for(i =0 ; i<nombreVariable ; i++) // initialisation du tableau a 0
     {
         tab_nbr_apparition_variable[i] = 0;
     }
+    
+	while(newContrainte != NULL)
+	{
+		tab =newContrainte->presenceVariable ;
+		for(i =0 ; i<nombreVariable ; i++)
+		{
+			if(tab[i] == '1')
+			{
+				tab_nbr_apparition_variable[i]++;
+			}
+		}
+		newContrainte = newContrainte->suivant;
+	}
 
-    while( !(fin_de_liste(news)) ) // boucle remplissant le tableau avec les nbr d'aparition des variables dans les contraintes
-    {
-        newContrainte = news->contraintes;
-        while(newContrainte != NULL)
-        {
-            tab =newContrainte->presenceVariable ;
-            for(i =0 ; i<nombreVariable ; i++)
-            {
-                if(tab[i] == '1')
-                {
-                    tab_nbr_apparition_variable[i]++;
-                }
-            }
-            newContrainte = newContrainte->suivant;
-        }
-        news = news->suivant;
-    }
-
-    news = listeVariables;
     i = 0;
-
     while( !(fin_de_liste(news)) )
     { // boucle affectant les id des dans les variables: nombre d'apparition contrainte divise par taille domaine
         news->id = tab_nbr_apparition_variable[i++] / (float)taille(news->domaines->dom);
@@ -318,6 +329,8 @@ void tri_liste_variable()
 
     while(fini != 1) // tri a bulle de la liste doublement chainée
     {
+        indice1 = 0;
+		indice2 = 1;
         fini = 1;
         precedent = listeVariables;
         news = precedent->suivant;
@@ -327,6 +340,7 @@ void tri_liste_variable()
         if(precedent->id < news->id) // cas particulier pour savoir si le pointeur en debut de liste doit changer
         {
             fini = 0;
+			changerTableauxPresence(indice1,indice2);
             precedent->suivant = suivant;
             precedent->precedent = news;
             news->suivant = precedent;
@@ -342,14 +356,18 @@ void tri_liste_variable()
         tampon = precedent;
         precedent = news;
         news = suivant;
+        indice1++;
+        indice2++;
+
         if(suivant != NULL)
-            suivant = suivant->suivant;
+            suivant = suivant->suivant;   
         
         while( ! fin_de_liste(news))
         {
             if(precedent->id < news->id)
             {
                 fini = 0;
+				changerTableauxPresence(indice1,indice2);
                 precedent->suivant = suivant;
                 precedent->precedent = news;
                 news->suivant = precedent;
@@ -366,12 +384,14 @@ void tri_liste_variable()
             tampon = precedent;
             precedent = news;
             news = suivant;
+            indice1++;
+            indice2++;
             
             if(suivant != NULL)
                 suivant = suivant->suivant;
         }
     }
-        // maintenant que les variables sont triées on leurs affectent un id correspondant de 0 a nombreVariable-1
+	// maintenant que les variables sont triees on leurs affectent un id correspondant de 0 a nombreVariable-1
     news = listeVariables;
     i=0;
     while (! fin_de_liste(news) )
@@ -383,15 +403,15 @@ void tri_liste_variable()
 }
 
 int est_initialise(variables V){
-  return (V->valeur == (V->domaines->dom->valeur -1));
+	return (V->valeur == (V->domaines->dom->valeur -1));
 }
 
 int longueur(variables V){
-  variable* Xi = premiere_variable(V);
-  int i=0;
-  while( !fin_de_liste(Xi) ){
-    i++;
-    Xi = suivante(Xi);
-  }
-  return i;
+	variable* Xi = premiere_variable(V);
+	int i=0;
+	while( !fin_de_liste(Xi) ){
+		i++;
+		Xi = suivante(Xi);
+	}
+	return i;
 }

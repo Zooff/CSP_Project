@@ -78,8 +78,6 @@ int main(int argc, char* argv[])
 
     initialiserValeurVariables(listeVariables);
     
-    tri_liste_variable();
-    
     switch(algorithmeUtilise){
 	case 1 :
 		resolutionBacktrackUneSolution(listeVariables);

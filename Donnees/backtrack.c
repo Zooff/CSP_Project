@@ -121,7 +121,7 @@ void forward_check(variables X_instanciee){
 	while( !fin_de_liste(V)){
 		l = V->contraintes;
 		while(l!= NULL){
-			if((l->presenceVariable)[X_instanciee->id]=='1') {
+			if((l->presenceVariable)[(int)X_instanciee->id]=='1') {
 				while(affecter_valeur(V)){
 					if (evalue_contrainte(l->a))
 						ajouter_valeur(&D,V->valeur);

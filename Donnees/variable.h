@@ -11,13 +11,16 @@
 #include "pile_domaines.h"
 #include "listeContrainte.h"
 
+
 extern int num_ligne; // recouvre la variable num_ligne du fichier lex.l
 extern int typeCSP;
 extern int forwardChecking;
 extern int nombreVariable;
+extern listeContrainte listeContraintes;
+
 
 typedef struct variable{
-  int id; // Chaque variable possède un id unique (initialement à -1, valeur fixé lors du tri des variables)
+  float id; // Chaque variable possède un id unique (initialement à -1, valeur fixé lors du tri des variables)
   char * nom; // Nom de la variable
   float valeur; // Valeur prise par la variable (initialement à borne_inférieur - 1 du domaine)
   pile_domaines domaines; //Pointeur sur le premier domaine de la pile
@@ -96,6 +99,10 @@ void initialiserValeurVariables(variables V);
 // ajout des contraintes differents entre la variable dont le nom est dans nomVariable et toutes les variables dans la liste variablesAlldiff
 // fonction utile pour faire les contraintes ALLDIFF
 void ajouterContraintesDifferent(char* nomVariable, variables variablesAlldiff, listeContrainte* contraintes, variables V, int nombreVariable);
+
+//fonction apelle dans tri_liste_variable elle sert a modifier les tableaux presenceVariable de toute les contraintes du csp en intervertissant 
+//les case corespondant aux indices donnés en parametre
+void changerTableauxPresence(int i1, int i2);
 
 // fonction qui tri les variables par ordre decroissant du (nombre d'apparition dans contrainte divisé par taille du domaine)
 // puis affectation dans les ID dans l'ordre de la liste entre 0 et nombreVariable-1
