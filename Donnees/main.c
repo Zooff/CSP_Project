@@ -89,6 +89,9 @@ int main(int argc, char* argv[])
 		forwardChecking = 1;
 		resolutionBacktrackUneSolution(listeVariables);
 		break;
+        case 4:
+                resolutionBacktrackToutesSolutionsAC(listeVariables);
+                break;
 	default :
 		fprintf(fileToWrite, "Numero d'algo de resolution inconnu\n");
 		usage(argv[0]);

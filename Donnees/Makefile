@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -lm -g
-LISTE = main.c y.tab.o lex.o variable.o xmalloc.o domaine.o pile_domaines.o arbre.o  listeContrainte.o backtrack.o
+LISTE = main.c y.tab.o lex.o variable.o xmalloc.o domaine.o pile_domaines.o arbre.o  listeContrainte.o backtrack.o arc_consistance.o
 
 all: main clean
 

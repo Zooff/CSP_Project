@@ -18,6 +18,7 @@ variables ajouter_var(variables V, char* nom_var){
 	new->domaines = creer_pile_domaines();
 	new->precedent = NULL;
 	new->suivant = V;
+	new->est_initialise = 0;
 	if (V != NULL)
 		V->precedent = new;
 	return new;
@@ -101,11 +102,20 @@ int affecter_valeur(variables V){
 }
 
 variable* suivante(variable* var){
+	var->est_initialise = 0;
 	return var->suivant;
 }
 
 variable* precedente(variable* var){
-	var->valeur = (float)(var->domaines->dom->valeur - 1);
+	if(var->domaines->dom!=NULL)
+		var->valeur = (float)(var->domaines->dom->valeur - 1);
+	else
+	{
+		pile_domaines d = var->domaines->precedent;
+		while(d!=NULL && d->dom == NULL)
+			d = d->precedent;
+		var->valeur = (float)(d->dom->valeur - 1);
+	}
 	if(forwardChecking){
 		variables V = suivante(var);
 		listeContrainte l;
@@ -120,6 +130,7 @@ variable* precedente(variable* var){
 		}
 		V = suivante(V);
 	}
+        var->est_initialise = 1;
 	return var->precedent;
 }
 
@@ -229,6 +240,7 @@ void affecterContraintesDansVariables(variables V, listeContrainte* lc, int nomb
 void initialiserValeurVariables(variables V){
 	while(V != NULL){
 		V->valeur = (float)(V->domaines->dom->valeur - 1);
+		V->est_initialise = 1;
 		V = V->suivant;
 	}
 }
@@ -403,7 +415,7 @@ void tri_liste_variable()
 }
 
 int est_initialise(variables V){
-	return (V->valeur == (V->domaines->dom->valeur -1));
+	return(V->est_initialise);
 }
 
 int longueur(variables V){

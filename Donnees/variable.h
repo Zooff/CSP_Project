@@ -25,6 +25,7 @@ typedef struct variable{
   float valeur; // Valeur prise par la variable (initialement à borne_inférieur - 1 du domaine)
   pile_domaines domaines; //Pointeur sur le premier domaine de la pile
   listeContrainte contraintes; // Les contraintes à vérifier pour cette variable lorsqu'elle est affectée
+  int est_initialise;
   struct variable * suivant; // Pointeur sur la variable suivante
   struct variable * precedent; //Pointeur sur la variable precedent
 } variable;

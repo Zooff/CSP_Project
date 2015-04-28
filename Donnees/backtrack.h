@@ -16,6 +16,8 @@ void resolutionBacktrackUneSolution(variables V);
 
 void resolutionBacktrackToutesSolutions(variables V);
 
+void resolutionBacktrackToutesSolutionsAC(variables V);
+
 void forward_check(variables X_instanciee);
 
 #endif

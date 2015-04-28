@@ -77,7 +77,6 @@ void resolutionBacktrackToutesSolutions(variables V)
     {
         while( !fin_de_liste(Xi) )
         {
-	  //arc_consistance(V);
             while( (existeSolution=affecter_valeur(Xi)) )
             {
                 existeSolution = verifier_les_contraintes(Xi);
@@ -86,12 +85,10 @@ void resolutionBacktrackToutesSolutions(variables V)
             }
             if(existeSolution == 1)
 	      {
-		//majdomaineFC(V);
                 Xi = suivante(Xi);
 	      }
             else
 	      {
-		// depile_tout_domaine(V);
                 Xi = precedente(Xi);
 	      }
         }
@@ -101,7 +98,7 @@ void resolutionBacktrackToutesSolutions(variables V)
 			if(!modeSilence)
 				fprintf(fileToWrite, "Solution fonctionnant:\n");
 			afficheSolution(V);		
-            Xi = derniereVariable;
+                        Xi = derniereVariable;
 			if(!modeSilence)
 			{
 				fprintf(fileToWrite, "Appuyez sur entrée pour la prochaine solution\n");
@@ -112,6 +109,88 @@ void resolutionBacktrackToutesSolutions(variables V)
             fprintf(fileToWrite, "Plus de solution\n");
     }
 }
+
+void resolutionBacktrackToutesSolutionsAC(variables V)
+{
+    arc_consistance(V);
+    variable* Xi2;
+    variable* Xi = premiere_variable(V);
+    variable* derniereVariable = derniere_variable(V); 
+    int i;
+    float existeSolution = 1;
+	if(!modeSilence)
+		fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant toutes les solutions\n");
+    while(existeSolution)
+    {
+        while( !fin_de_liste(Xi) )
+        {
+		//TEST
+		  fprintf(fileToWrite, "variable actuel: %s\n",Xi->nom);
+		  Xi2 = premiere_variable(V);
+		  /*while(!fin_de_liste(Xi2))
+		  {
+		  fprintf(fileToWrite, "variable: %s domaine:\n",Xi2->nom);
+		  afficher_domaine(Xi2->domaines->dom);
+		  fprintf(fileToWrite, "\n");
+		  Xi2 = Xi2->suivant;
+		  }*/
+	/*	  i = 0;
+		  while(!fin_de_liste(Xi2))
+		  {
+		  if(i%9==0)
+			fprintf(fileToWrite, "\n");
+		  if(i%3==0)
+			fprintf(fileToWrite, "\t");
+                  if(est_initialise(Xi2))
+			fprintf(fileToWrite, "- ");
+		  else
+		  {
+			if(Xi2->domaines->dom==NULL)
+				fprintf(fileToWrite, "X ");
+			else
+				fprintf(fileToWrite, "%d ",((int)floor(Xi2->valeur)));
+		  }
+		  Xi2 = Xi2->suivant;
+		  i++;
+		  }*/
+		//FINTEST
+            while( (existeSolution=affecter_valeur(Xi)) )
+            {
+                existeSolution = verifier_les_contraintes(Xi);
+                if(existeSolution == 1)
+                    break;
+            }
+            if(existeSolution == 1)
+	      {
+                Xi = suivante(Xi);
+		arc_consistance(V);
+		//majdomaineFC(V);
+	      }
+            else
+	      {
+		Xi = precedente(Xi);
+		depile_tout_domaine(V);
+	      }
+        }
+
+        if(existeSolution == 1)
+        {
+			if(!modeSilence)
+				fprintf(fileToWrite, "Solution fonctionnant:\n");
+			afficheSolution(V);		
+                        Xi = derniereVariable;
+                        depile_tout_domaine(V);
+			if(!modeSilence)
+			{
+				fprintf(fileToWrite, "Appuyez sur entrée pour la prochaine solution\n");
+				fgetc(stdin);
+			}
+        }
+        else if(!modeSilence)
+            fprintf(fileToWrite, "Plus de solution\n");
+    }
+}
+
 
 
 void forward_check(variables X_instanciee){
