@@ -32,10 +32,10 @@ extern FILE* fileToWrite;
 
 typedef struct noeud
 {
-  int nature; /* prend la valeur d'une des constantes ci dessus */
-  float* valeur; // on y stocke soit un reel, soit un entier, soit 0 ou 1
-  struct noeud* fils; /* pointeur sur le fils */
-  struct noeud* frangin; /* pointeur sur le frangin */
+	int nature; /* prend la valeur d'une des constantes ci dessus */
+	float* valeur; // on y stocke soit un reel, soit un entier, soit 0 ou 1
+	struct noeud* fils; /* pointeur sur le fils */
+	struct noeud* frangin; /* pointeur sur le frangin */
 }noeud;
 typedef noeud* arbre;
 

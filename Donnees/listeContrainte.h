@@ -7,9 +7,9 @@ extern FILE* fileToWrite;
 
 typedef struct maillonContrainte
 {
-  arbre a; // arbre des contraintes
-  char* presenceVariable; // chaine de 0 et 1. si presenceVariable[i] == 1, alors il y a la variable d'indice i dans l'arbre de la contrainte, sinon elle n'y est pas
-  struct maillonContrainte* suivant;
+	arbre a; // arbre des contraintes
+	char* presenceVariable; // chaine de 0 et 1. si presenceVariable[i] == '1', alors il y a la variable d'indice i dans l'arbre de la contrainte, sinon elle n'y est pas
+	struct maillonContrainte* suivant;
 }maillonContrainte;
 typedef maillonContrainte* listeContrainte;
 
@@ -29,9 +29,9 @@ void vider_liste_contrainte(listeContrainte l);
 // vide recursivement la liste
 
 void afficher_liste_contrainte(listeContrainte l);
-// affiche les arbre de chaque contraintes
+// affiche les arbres de chaque contraintes
 
 char* creerTableauPresenceVariable(int nombreVariable);
-// creer le tableau stockant la presence des variables dans l'arbre d'une contrainte
+// alloue le tableau stockant la presence des variables dans l'arbre d'une contrainte
 
 #endif

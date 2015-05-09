@@ -2,59 +2,59 @@
 
 arbre cons_noeud(int nature, float* valeur)
 {
-  arbre a = (arbre)malloc(1 * sizeof(noeud)); /* allocation dynamique d'un noeud */
-  if(nature == A_ENTIER || nature == A_REEL || nature == A_BOOLEEN)
-    a->valeur = (float*) malloc(1 * sizeof(float));
-  else
-    a->valeur = valeur;
-  a->nature = nature;
-  a->frangin = a->fils = NULL; /* le noeud est pour l'instant une feuille sans fils ni frangin */
-  return a;
+	arbre a = (arbre)malloc(1 * sizeof(noeud)); /* allocation dynamique d'un noeud */
+	if(nature == A_ENTIER || nature == A_REEL || nature == A_BOOLEEN)
+		a->valeur = (float*) malloc(1 * sizeof(float));
+	else
+		a->valeur = valeur;
+	a->nature = nature;
+	a->frangin = a->fils = NULL; /* le noeud est pour l'instant une feuille sans fils ni frangin */
+	return a;
 }
 
 void videArbre(arbre a)
 {
-  if(a!=NULL)
-  {
-    videArbre(a->fils); /* vide le fils */
-    videArbre(a->frangin); /* puis vide le frangin */
-    if(a->nature != A_IDF)
-      free(a->valeur);
-    free(a); /* et enfin vide a */
-  }
+	if(a!=NULL)
+	{
+		videArbre(a->fils); /* vide le fils */
+		videArbre(a->frangin); /* puis vide le frangin */
+		if(a->nature != A_IDF)
+			free(a->valeur);
+		free(a); /* et enfin vide a */
+	}
 }
 
 arbre attache_papa_frangin(arbre papa, arbre frangin)
 {
-  papa->frangin = frangin;
-  return papa;
+	papa->frangin = frangin;
+	return papa;
 }
 
 arbre attache_papa_fils(arbre papa, arbre fils)
 {
-  papa->fils = fils;
-  return papa;
+	papa->fils = fils;
+	return papa;
 }
 
 void afficheArbre(arbre a, int espace)
 {
-  int i;
-  for(i=0 ; i<espace ; i++) /* indentation */
-    fprintf(fileToWrite, " ");
-  if(a != NULL)
-  {
-    afficheArbreBis(a); /* affiche en lettre la nature du noeud (qui est un int) */
-    afficheArbre(a->fils, espace+2); /* affichage du fils avec une plus grande identation */
-    afficheArbre(a->frangin, espace); /* affichage du frangin avec une meme indentation pour donner l'impression d'un arbre en penchant la tete a gauche */
-  }
-  else
-    fprintf(fileToWrite, "ø\n");
+	int i;
+	for(i=0 ; i<espace ; i++) /* indentation */
+		fprintf(fileToWrite, " ");
+	if(a != NULL)
+	{
+		afficheArbreBis(a); /* affiche en lettre la nature du noeud (qui est un int) */
+		afficheArbre(a->fils, espace+2); /* affichage du fils avec une plus grande identation */
+		afficheArbre(a->frangin, espace); /* affichage du frangin avec une meme indentation pour donner l'impression d'un arbre en penchant la tete a gauche */
+	}
+	else
+		fprintf(fileToWrite, "ø\n");
 }
 
 void afficheArbreBis(arbre a)
 {
-  switch(a->nature)
-  {
+	switch(a->nature)
+	{
     case 10: fprintf(fileToWrite, "IDF");               break;
     case 11: fprintf(fileToWrite, "ENTIER %d", (int)(*(a->valeur)));break;
     case 12: fprintf(fileToWrite, "REEL %f", *(a->valeur));break;
@@ -78,14 +78,14 @@ void afficheArbreBis(arbre a)
     case 30: fprintf(fileToWrite, "DIVISE_PAR");        break;
     case 31: fprintf(fileToWrite, "MODULO");            break;
     default: fprintf(fileToWrite, "noeud inconnu");
-  }
-  fprintf(fileToWrite, "\n");
+	}
+	fprintf(fileToWrite, "\n");
 }
 
 float evalue_contrainte(arbre a)
 {
-  switch(a->nature)
-  {
+	switch(a->nature)
+	{
     case A_IDF:               return *(a->valeur);
     case A_ENTIER:            return *(a->valeur);
     case A_REEL:              return *(a->valeur);
@@ -109,5 +109,5 @@ float evalue_contrainte(arbre a)
     case A_DIVISE_PAR:        return (evalue_contrainte(a->fils) / evalue_contrainte(a->fils->frangin));
     case A_MODULO:            return (float)((int)evalue_contrainte(a->fils) % (int)evalue_contrainte(a->fils->frangin));
     default:                  return 0;
-  }
+	}
 }
