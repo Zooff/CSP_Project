@@ -1,0 +1,9 @@
+XD
+	u,w,r,o,c1,c2,c3 : [0 .. 9]
+	f,t : [1 .. 9]
+C
+	ALLDIFF(f,t,u,w,r,o)
+	o + o = r + (10 * c1)
+	w + w + c1 = u + (10 * c2)
+	t + t + c2 = o + (10 * c3)
+	c3 = f

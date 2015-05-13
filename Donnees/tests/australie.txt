@@ -1,0 +1,16 @@
+XD
+	w_a,n_t,s_a,q_i,nsw,vic,tas : {1,2,3}
+C
+	w_a != n_t
+	w_a != s_a
+
+	n_t != s_a
+	n_t != q_i
+
+	s_a != q_i
+	s_a != nsw
+	s_a != vic
+
+	q_i != nsw
+
+	nsw != vic

@@ -1,0 +1,8 @@
+XD
+	nombre_adultes : {400}
+	nombre_enfants : {200}
+	total : {15000}
+	prix_adulte, prix_enfant : [0 .. 100]
+C
+	prix_adulte = 2 * prix_enfant
+	total = nombre_adultes * prix_adulte + nombre_enfants * prix_enfant

@@ -1,0 +1,8 @@
+XD
+	initial : {15,45,90}
+	lundi, mardi, mercredi : [0 .. 10000]
+C
+	lundi = initial / 2
+	mardi = lundi * (2/3)
+	mardi = mercredi
+	mercredi = 30

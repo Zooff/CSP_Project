@@ -1,0 +1,6 @@
+XD
+	naissance : [1900 .. 2015]
+	age1972, age2010 : [0 .. 115]
+C
+	naissance = age1972 * age2010
+	age2010 = age1972 + (2010 - 1972)
