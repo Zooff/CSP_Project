@@ -26,6 +26,9 @@ void resolutionBacktrackToutesSolutions(variables V);
 void resolutionBacktrackToutesSolutionsAC(variables V);
 // la resolution par arc consistance cherchant toutes les solutions
 
+void resolutionBacktrackToutesSolutionsFC(variables V);
+// toutes les solutions avec Forward Checking
+
 void forward_check(variables X_instanciee);
 // cette routine doit permettre de reduire la taille des domaines des variables n'ayant pas encore de valeur via les contraintes qu'impose les variables ayant une valeur
 

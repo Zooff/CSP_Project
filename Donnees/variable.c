@@ -107,28 +107,28 @@ variable* suivante(variable* var){
 }
 
 variable* precedente(variable* var){
-	if(var->domaines->dom!=NULL)
-		var->valeur = (float)(var->domaines->dom->valeur - 1);
-	else
-	{
-		pile_domaines d = var->domaines->precedent;
-		while(d!=NULL && d->dom == NULL)
-			d = d->precedent;
-		var->valeur = (float)(d->dom->valeur - 1);
-	}
-	if(forwardChecking){
-		variables V = suivante(var);
-		listeContrainte l;
-		while( !fin_de_liste(V)){
-			l = V->contraintes;
-			while(l!= NULL){
-				if(l->presenceVariable[(int)var->id]=='1') {
-					depiler(&(V->domaines));
-				}
-				l = l->suivant;
-			}
-		}
+    if(forwardChecking){
+	variables V = var;
+	if(V!=NULL){
+	    do{
+		
+		depiler(&(V->domaines));
+	
 		V = suivante(V);
+	    } while( !fin_de_liste(V));
+	} 
+    }
+    else{
+
+	    if(var->domaines->dom!=NULL)
+		var->valeur = (float)(var->domaines->dom->valeur - 1);
+	    else
+		{
+		    pile_domaines d = var->domaines->precedent;
+		    while(d!=NULL && d->dom == NULL)
+			d = d->precedent;
+		    var->valeur = (float)(d->dom->valeur - 1);
+		}
 	}
         var->est_initialise = 1;
 	return var->precedent;

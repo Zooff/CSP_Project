@@ -91,33 +91,32 @@
       //On fait avancer les itérateurs
       courant = courant->suivant;
     }
-
     if(courant->suivant == NULL){
       /*On a parcouru tout le domaine sans insérer d'élément
        * c'est donc que sa valeur est supérieure à toutes les autres valeurs du domaine
        * on fait donc pointer le suivant de précédent sur l'élément à ajouter
        * on met le suivant de l'élément à ajouter à NULL puisqu'il est le dernier élément du domaine
        */
-
        if (courant->valeur > value)
        {
-         courant->precedent->suivant = maillon;
-         maillon->precedent = courant->precedent;
-         courant->precedent = maillon;
-         maillon->suivant = courant;
-
-         return 1;
+	   if(courant->precedent != NULL) {
+	       courant->precedent->suivant = maillon;
+	       maillon->precedent = courant->precedent;
+	   }
+	   courant->precedent = maillon;	   
+	   maillon->suivant = courant;
+	   
+	   return 1;
        }
+       courant->suivant = maillon;
+       maillon->precedent = courant;
+       maillon->suivant = NULL;
 
-      courant->suivant = maillon;
-      maillon->precedent = courant;
-      maillon->suivant = NULL;
-
-      return 1;
+       return 1;
     }
   }
   return 0;
-}
+    }
 
 int retirer_valeur(domaine* d, int value)
 {

@@ -21,6 +21,10 @@ void usage(char* prog){
 	fprintf(fileToWrite, "Usage : %s [-a nombre] [-o fichier_où_ecrire] [-s] [-t nombre] [-v] [-z] fichier_contenant_le_CSP\n", prog);
 	fprintf(fileToWrite, "\t-a nombre : permet d'utiliser l'algorithme de numéro nombre, nombre peut prendre plusieurs valeurs :\n");
 	fprintf(fileToWrite, "\t\t1 : l'algorithme utilisé sera l'algorithme de backtrack (comportement de base si l'option n'est pas renseignée)\n");
+	fprintf(fileToWrite, "\t\t2 : l'algorithme utilisé sera l'algorithme de backtrack (toutes solutions)\n");
+	fprintf(fileToWrite, "\t\t3 : l'algorithme utilisé sera l'algorithme de backtrack avec Forward Checking (solution unique)\n");
+	fprintf(fileToWrite, "\t\t4 : l'algorithme utilisé sera l'algorithme de backtrack avec Arc Consistance (toutes solutions)\n");
+	fprintf(fileToWrite, "\t\t5 : l'algorithme utilisé sera l'algorithme de backtrack avec Forward Checking (toutes solutions)\n");
 	fprintf(fileToWrite, "\t\tTO DO\n");
 	fprintf(fileToWrite, "\t-o fichier_où_ecrire : le résultat du CSP sera écrit dans le fichier fichier_où_ecrire\n");
 	fprintf(fileToWrite, "\t-s : active le mode silence\n");
@@ -92,6 +96,10 @@ int main(int argc, char* argv[])
         case 4:
                 resolutionBacktrackToutesSolutionsAC(listeVariables);
                 break;
+        case 5 : 
+	    forwardChecking = 1;
+	    resolutionBacktrackToutesSolutionsFC(listeVariables);
+	    break;
 	default :
 		fprintf(fileToWrite, "Numero d'algo de resolution inconnu\n");
 		usage(argv[0]);

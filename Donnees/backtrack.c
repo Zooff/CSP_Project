@@ -65,31 +65,43 @@ void resolutionBacktrackUneSolution(variables V)
 {
     variable* Xi = premiere_variable(V);
     float booleen;
-	if(!modeSilence)
-		fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant une seule solution\n");
+    if(!modeSilence)
+	fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant une seule solution\n");
     while( !fin_de_liste(Xi) )
-    {
-        while( (booleen=affecter_valeur(Xi)) )
-        {
-			if(forwardChecking)
-				forward_check(Xi);
-			
-            booleen = verifier_les_contraintes(Xi);
-            if(booleen == 1)
-                break;
-        }
-        if(booleen == 1)
-            Xi = suivante(Xi);
-        else
-            Xi = precedente(Xi);
-    }
-
+	{
+	    while( (booleen=affecter_valeur(Xi)) )
+		{
+		    if(forwardChecking)
+			forward_check(Xi);
+		    
+		    booleen = verifier_les_contraintes(Xi);
+		    if(booleen == 1)
+			break;
+		    
+		    else if(forwardChecking){ 
+			variables V = suivante(Xi);
+			if(V!=NULL){
+			    do{
+				depiler(&(V->domaines));
+		    		V = suivante(V);
+			    } while( !fin_de_liste(V));
+			}
+		    }
+		}
+	    if(booleen == 1){
+		Xi = suivante(Xi);
+	    }
+	    else{
+		Xi = precedente(Xi);
+	    }
+	}
+    
     if(booleen == 1)
-    {
-		if(!modeSilence)
-			fprintf(fileToWrite, "Solution fonctionnant:\n");
-		afficheSolution(V);
-    }
+	{
+	    if(!modeSilence)
+		fprintf(fileToWrite, "Solution fonctionnant:\n");
+	    afficheSolution(V);
+	}
     else if(!modeSilence)
         fprintf(fileToWrite, "Pas de solution\n");
 }
@@ -219,24 +231,101 @@ void resolutionBacktrackToutesSolutionsAC(variables V)
     }
 }
 
+void resolutionBacktrackToutesSolutionsFC(variables V)
+{
+    variable* Xi = premiere_variable(V);
+    variable* derniereVariable = derniere_variable(V);
+    float existeSolution = 1;
+	if(!modeSilence)
+		fprintf(fileToWrite, "\nLancement de l'algorithme de backtrack donnant toutes les solutions\n");
+    while(existeSolution)
+    {
+        while( !fin_de_liste(Xi) )
+        {
+            while( (existeSolution=affecter_valeur(Xi)) )
+            {
+		if(forwardChecking)
+		    forward_check(Xi);
+                existeSolution = verifier_les_contraintes(Xi);
+                if(existeSolution == 1)
+                    break;
+		else if(forwardChecking){ 
+		    variables V = suivante(Xi);
+		    if(V!=NULL){
+			do{
+			    depiler(&(V->domaines));
+			    V = suivante(V);
+			} while( !fin_de_liste(V));
+		    }
+		}
+            }
+            if(existeSolution == 1)
+			{
+                Xi = suivante(Xi);
+			}
+            else
+			{
+                Xi = precedente(Xi);
+			}
+        }
 
+        if(existeSolution == 1)
+        {
+			if(!modeSilence)
+				fprintf(fileToWrite, "Solution fonctionnant:\n");
+			afficheSolution(V);		
+			Xi = derniereVariable;
+			if(!modeSilence)
+			{
+				fprintf(fileToWrite, "Appuyez sur entrée pour la prochaine solution\n");
+				fgetc(stdin);
+			}
+        }
+        else if(!modeSilence)
+            fprintf(fileToWrite, "Plus de solution\n");
+    }
+}
 
 void forward_check(variables X_instanciee){
-	variables V = suivante(X_instanciee);
+    variables V = suivante(X_instanciee);
+    if(V!=NULL){
 	listeContrainte l;
-	domaine D;
-	while( !fin_de_liste(V)){
-		l = V->contraintes;
-		while(l!= NULL){
-			if((l->presenceVariable)[(int)X_instanciee->id]=='1') {
-				while(affecter_valeur(V)){
-					if (evalue_contrainte(l->a))
-						ajouter_valeur(&D,V->valeur);
-					empiler(&(V->domaines), D) ;
-				}
+	domaine copie;
+	
+	  while(!fin_de_liste(V)){
+	      copie= dupliquer_domaine(V->domaines->dom);
+	      empiler(&(V->domaines),copie);
+	      V = suivante(V);
+
+	  }
+	  
+	  V=suivante(X_instanciee);
+	 
+	do{
+	    l = V->contraintes;
+	    while(l!= NULL){
+		if((l->presenceVariable)[(int)X_instanciee->id]=='1'){
+		    while(affecter_valeur(V)){
+			if (evalue_contrainte(l->a)){
+			} 
+			else{
+			    retirer_valeur(&(V->domaines->dom),V->valeur);
 			}
-			l = l->suivant;
+		    }
+		    if(est_vide(V->domaines->dom)){
+			pile_domaines pileDom = V->domaines;
+			while(est_vide(pileDom->dom)){
+			    pileDom= pileDom->precedent;
+			}
+			V->valeur = pileDom->dom->valeur -1;
+		    }
+		    else{
+				V->valeur = (float)(V->domaines->dom->valeur - 1);
+		    }
 		}
-	}
-	V = suivante(V);
+		l = l->suivant;
+	    }
+	    V = suivante(V);
+	} while( !fin_de_liste(V));
+    }
 }
